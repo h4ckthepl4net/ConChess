@@ -1,0 +1,29 @@
+#pragma once
+
+#ifndef PIECE_SYMBOLS_H
+#define PIECE_SYMBOLS_H
+
+#include <stdexcept>
+
+enum class PieceSymbols {
+	KING,
+	QUEEN,
+	ROOK,
+	BISHOP,
+	KNIGHT,
+	PAWN,
+};
+
+constexpr const char* PieceSymbolToString(PieceSymbols symbol) {
+	switch (symbol) {
+		case PieceSymbols::KING: return "K";
+		case PieceSymbols::QUEEN: return "Q";
+		case PieceSymbols::ROOK: return "R";
+		case PieceSymbols::BISHOP: return "B";
+		case PieceSymbols::KNIGHT: return "K";
+		case PieceSymbols::PAWN: return "P";
+		default: throw std::invalid_argument("Invalid PieceSymbols");
+	}
+}
+
+#endif
