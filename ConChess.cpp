@@ -8,7 +8,7 @@ int main()
     Game game;
 	game.preparePlayers();
 	game.prepareBoard();
-	//game.start();
+	game.start();
 
 	return 0;
 }

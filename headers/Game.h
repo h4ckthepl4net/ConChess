@@ -15,11 +15,12 @@ class Game {
 	unsigned char playerCount;
 
 	void initPlayers(unsigned char);
+	void prepareConsoleForGame();
 public:
 	Game(unsigned char playerCount = 2);
 	void preparePlayers();
 	void prepareBoard();
-	//void start();
+	void start();
 };
 
 #endif // !GAME_H

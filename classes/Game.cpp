@@ -1,13 +1,17 @@
 #include "../headers/Game.h"
 
 
-Game::Game(unsigned char playerCount): board(this->console) {
+Game::Game(unsigned char playerCount): board(this->console), console(this->board) {
 	this->initPlayers(playerCount);
 }
 
 void Game::initPlayers(unsigned char playerCount) {
 	this->players = new Player[playerCount];
 	this->playerCount = playerCount;
+}
+
+void Game::prepareConsoleForGame() {
+	// TODO resize and prevent resizing by user
 }
 
 void Game::preparePlayers() {
@@ -30,4 +34,9 @@ void Game::prepareBoard() {
 	const unsigned char player2PiecesCount = this->players[1].getPiecesCount();
 	this->board.placePieces(player1Pieces, player1PiecesCount);
 	this->board.placePieces(player2Pieces, player2PiecesCount);
+}
+
+void Game::start() {
+	this->prepareConsoleForGame();
+	this->board.draw();
 }

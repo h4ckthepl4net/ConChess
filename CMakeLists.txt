@@ -22,6 +22,8 @@ add_executable (
 	"headers/utilities/Coords.h"
 	"headers/constants/Pieces.h"
 	"headers/constants/PieceIDs.h"
+	"headers/constants/FieldDeltas.h"
+	"headers/constants/Fields.h"
 
 	"headers/Game.h"
 	"headers/Player.h"
@@ -46,8 +48,7 @@ add_executable (
 	"classes/special-pieces/Knight.cpp"
 	"classes/special-pieces/Rook.cpp"
 	"classes/special-pieces/Pawn.cpp"
-	
-  "headers/constants/FieldDeltas.h" "headers/constants/Fields.h")
+ )
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ConChess PROPERTY CXX_STANDARD 20)
