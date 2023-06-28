@@ -1,4 +1,4 @@
-#include "../headers/Console.h"
+﻿#include "../headers/Console.h"
 #include "../headers/Board.h"
 #include "../headers/utilities/LetterNotation.h"
 
@@ -17,13 +17,20 @@ Console::Console(
 	}
 }
 
-void Console::drawBlackTile(char tileContent, int contentColor) const {
-	SetConsoleTextAttribute(this->hConsole, BACKGROUND_INTENSITY | contentColor);
+void Console::drawBlackTile(std::string tileContent, int contentColor) const {
+	SetConsoleTextAttribute(this->hConsole, FOREGROUND_INTENSITY | contentColor);
 	std::cout << ' ' << tileContent;
 };
-void Console::drawWhiteTile(char tileContent, int contentColor) const {
-	SetConsoleTextAttribute(this->hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | BACKGROUND_INTENSITY | contentColor);
+void Console::drawWhiteTile(std::string tileContent, int contentColor) const {
+	SetConsoleTextAttribute(this->hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | FOREGROUND_INTENSITY | contentColor);
 	std::cout << ' ' << tileContent;
+};
+
+void Console::drawBlackTile(char tileContent, int contentColor) const {
+	this->drawBlackTile(std::string(1, tileContent), contentColor);
+};
+void Console::drawWhiteTile(char tileContent, int contentColor) const {
+	this->drawWhiteTile(std::string(1, tileContent), contentColor);
 };
 
 void Console::notateHorizontalFrame(std::uint8_t offsetY) const {
@@ -59,13 +66,18 @@ void Console::drawBoard() const {
 	self.notateHorizontalFrame(0);
 	self.notateSideFrame(0);
 	COORD cursorPos = { 3,1 };
+	unsigned int arrayPos;
 	for (unsigned int i = 0; i < width; i++) {
 		SetConsoleCursorPosition(this->hConsole, cursorPos);
 		for (unsigned int j = 0; j < width; j++) {
+			arrayPos = (i * width + j);
+			Piece* piece = board[arrayPos];
+			std::string symbol = piece ? piece->getSymbol() : " ";
+			int color = piece ? piece->getConsoleColor() : 0;
 			if ((i + j) % 2 == 0) {
-				self.drawBlackTile();
+				self.drawBlackTile(symbol, color);
 			} else {
-				self.drawWhiteTile();
+				self.drawWhiteTile(symbol, color);
 			}
 			if (j == width - 1) {
 				std::cout << ' ';

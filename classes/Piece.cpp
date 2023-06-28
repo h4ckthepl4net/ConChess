@@ -28,6 +28,10 @@ Piece::Piece(
 	}
 }
 
+std::string Piece::getSymbol() {
+	return this->symbol;
+}
+
 Coords Piece::getCoords() {
 	return this->coords;
 }
@@ -38,6 +42,14 @@ bool Piece::isWhite() {
 
 bool Piece::isBlack() {
 	return this->color == Color::BLACK;
+}
+
+int Piece::getConsoleColor() {
+	if (this->isBlack()) {
+		return 0;
+	}
+
+	return FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED;
 }
 
 Coords Piece::addDelta(Coords delta) {

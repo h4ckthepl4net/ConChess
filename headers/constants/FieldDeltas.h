@@ -7,10 +7,10 @@
 
 namespace FieldDeltas {
 	// First line pieces delta
-	const Coords FirstLine = { 0, -1 };
+	const Coords FirstLine = { -1, 0 };
 
 	// Second line pieces delta
-	const Coords SecondLine = { 0, -3 };
+	const Coords SecondLine = { -3, 0 };
 
 }
 

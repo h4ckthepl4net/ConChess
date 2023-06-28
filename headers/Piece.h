@@ -36,6 +36,7 @@ public:
 		Board& board,
 		bool isSecondLine = false
 	);
+	std::string getSymbol();
 	virtual Coords* getAvailableMoves() const = 0;
 	virtual bool canMove(Coords coords) const = 0;
 	virtual ~Piece() = default;
@@ -43,6 +44,7 @@ public:
 	bool move(Coords coords);
 	bool isWhite();
 	bool isBlack();
+	int getConsoleColor();
 	Coords getCoords();
 };
 

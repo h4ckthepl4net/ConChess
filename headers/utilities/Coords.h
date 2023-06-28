@@ -7,7 +7,7 @@ struct Coords {
 	char x;
 	char y;
 
-	Coords(char x = 0, char y = 0) : x(x), y(y) {}
+	Coords(char y = 0, char x = 0) : x(x), y(y) {}
 };
 
 #endif // !COORDS_H

@@ -20,7 +20,7 @@ constexpr const char* PieceSymbolToString(PieceSymbols symbol) {
 		case PieceSymbols::QUEEN: return "Q";
 		case PieceSymbols::ROOK: return "R";
 		case PieceSymbols::BISHOP: return "B";
-		case PieceSymbols::KNIGHT: return "K";
+		case PieceSymbols::KNIGHT: return "N";
 		case PieceSymbols::PAWN: return "P";
 		default: throw std::invalid_argument("Invalid PieceSymbols");
 	}

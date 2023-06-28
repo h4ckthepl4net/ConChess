@@ -11,15 +11,15 @@ Board::Board(
 }
 
 void Board::initBoard() {
-	this->board = new Piece*[height];
+	this->board = new Piece*[this->height * this->width]();
 }
 
 void Board::placePieces(Piece** pieces, unsigned char count) {
 	for (unsigned char i = 0; i < count; i++) {
 		const Coords coordinates = pieces[i]->getCoords();
 		const unsigned char x = coordinates.x;
-		const unsigned char y = coordinates.y;
-		this->board[x * y] = pieces[i];
+		const unsigned char y = (this->height + coordinates.y) % this->height;
+		this->board[x + (y * this->width)] = pieces[i];
 	}
 }
 

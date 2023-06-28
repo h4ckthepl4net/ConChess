@@ -16,6 +16,8 @@ class Console {
 	unsigned short height;
 	unsigned short width;
 
+	void drawBlackTile(std::string = " ", int = 0) const;
+	void drawWhiteTile(std::string = " ", int = 0) const;
 	void drawBlackTile(char = ' ', int = 0) const;
 	void drawWhiteTile(char = ' ', int = 0) const;
 

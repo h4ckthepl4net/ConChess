@@ -25,7 +25,7 @@ void Player::setBoard(Board* board) {
 }
 
 void Player::setColor(Color color) {
-	this->color;
+	this->color = color;
 }
 
 void Player::setName(std::string name) {

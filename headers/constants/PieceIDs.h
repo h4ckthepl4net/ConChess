@@ -20,7 +20,7 @@ constexpr const char* PieceIDsToString(PieceIDs id) {
 		case PieceIDs::QUEEN: return "Q";
 		case PieceIDs::ROOK: return "R";
 		case PieceIDs::BISHOP: return "B";
-		case PieceIDs::KNIGHT: return "K";
+		case PieceIDs::KNIGHT: return "N";
 		case PieceIDs::PAWN: return "P";
 		default: throw std::invalid_argument("Invalid PieceIDs");
 	}
