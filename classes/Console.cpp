@@ -58,6 +58,10 @@ void Console::clear() const {
 	system("cls");
 }
 
+void Console::prepare() const {
+	SetConsoleMode(this->hConsole, ENABLE_MOUSE_INPUT | ENABLE_WINDOW_INPUT);
+}
+
 void Console::drawBoard() const {
 	const unsigned int width = this->board.width;
 	const unsigned int height = this->board.height;
@@ -67,9 +71,9 @@ void Console::drawBoard() const {
 	self.notateSideFrame(0);
 	COORD cursorPos = { 3,1 };
 	unsigned int arrayPos;
-	for (unsigned int i = 0; i < width; i++) {
+	for (int i = height - 1; i >= 0; i--) {
 		SetConsoleCursorPosition(this->hConsole, cursorPos);
-		for (unsigned int j = 0; j < width; j++) {
+		for (int j = 0; j < width; j++) {
 			arrayPos = (i * width + j);
 			Piece* piece = board[arrayPos];
 			std::string symbol = piece ? piece->getSymbol() : " ";
@@ -80,7 +84,6 @@ void Console::drawBoard() const {
 				self.drawWhiteTile(symbol, color);
 			}
 			if (j == width - 1) {
-				std::cout << ' ';
 				cursorPos.Y++;
 				cursorPos.X = 3;
 			}

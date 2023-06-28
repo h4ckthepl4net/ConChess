@@ -11,6 +11,7 @@ void Game::initPlayers(unsigned char playerCount) {
 }
 
 void Game::prepareConsoleForGame() {
+	this->console.prepare();
 	// TODO resize and prevent resizing by user
 }
 
@@ -38,5 +39,7 @@ void Game::prepareBoard() {
 
 void Game::start() {
 	this->prepareConsoleForGame();
-	this->board.draw();
+	//do {
+		this->board.draw();
+	//} while (true);
 }

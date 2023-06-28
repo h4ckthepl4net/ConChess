@@ -31,6 +31,7 @@ public:
 		HANDLE = nullptr,
 		CONSOLE_SCREEN_BUFFER_INFOEX = {}
 	);
+	void prepare() const;
 	void drawBoard() const;
 	void clear() const;
 };
