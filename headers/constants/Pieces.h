@@ -12,6 +12,7 @@ enum class Pieces {
 	BISHOP,
 	KNIGHT,
 	PAWN,
+	POSSIBLE_MOVE,
 };
 
 constexpr const char* PiecesToString(Pieces piece) {
@@ -22,6 +23,7 @@ constexpr const char* PiecesToString(Pieces piece) {
 		case Pieces::BISHOP: return "Bishop";
 		case Pieces::KNIGHT: return "Knight";
 		case Pieces::PAWN: return "Pawn";
+		case Pieces::POSSIBLE_MOVE: return "PossibleMove";
 		default: throw std::invalid_argument("Invalid Pieces");
 	}
 }

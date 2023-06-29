@@ -12,6 +12,7 @@ enum class PieceIDs {
 	BISHOP,
 	KNIGHT,
 	PAWN,
+	POSSIBLE_MOVE,
 };
 
 constexpr const char* PieceIDsToString(PieceIDs id) {
@@ -22,6 +23,7 @@ constexpr const char* PieceIDsToString(PieceIDs id) {
 		case PieceIDs::BISHOP: return "B";
 		case PieceIDs::KNIGHT: return "N";
 		case PieceIDs::PAWN: return "P";
+		case PieceIDs::POSSIBLE_MOVE: return "PM";
 		default: throw std::invalid_argument("Invalid PieceIDs");
 	}
 }

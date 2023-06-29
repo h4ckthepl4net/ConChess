@@ -1,28 +1,34 @@
 ﻿#include "../headers/Console.h"
 #include "../headers/Board.h"
 #include "../headers/utilities/LetterNotation.h"
+#include "../headers/utilities/ConsoleEventType.h"
+#include "../headers/utilities/ConsoleEventDataUnion.h"
+
+const COORD Console::actualBoardOffset = { 3, 1 };
 
 Console::Console(
 	Board& board,
 	unsigned short height,
 	unsigned short width,
-	HANDLE externalHandle,
+	HANDLE externalOutputHandle,
+	HANDLE externalInputHandle,
 	CONSOLE_SCREEN_BUFFER_INFOEX externalConsoleInfo
 ): board(board), height(height), width(height) {
-	this->hConsole = externalHandle ? externalHandle : GetStdHandle(STD_OUTPUT_HANDLE);
+	this->hOutConsole = externalOutputHandle ? externalOutputHandle : GetStdHandle(STD_OUTPUT_HANDLE);
+	this->hInConsole = externalInputHandle ? externalInputHandle : GetStdHandle(STD_INPUT_HANDLE);
 	this->consoleInfo = externalConsoleInfo;
 	if (this->consoleInfo.cbSize == 0) {
 		this->consoleInfo.cbSize = sizeof(CONSOLE_SCREEN_BUFFER_INFOEX);
-		GetConsoleScreenBufferInfoEx(this->hConsole, &this->consoleInfo);
+		GetConsoleScreenBufferInfoEx(this->hOutConsole, &this->consoleInfo);
 	}
 }
 
 void Console::drawBlackTile(std::string tileContent, int contentColor) const {
-	SetConsoleTextAttribute(this->hConsole, FOREGROUND_INTENSITY | contentColor);
+	SetConsoleTextAttribute(this->hOutConsole, FOREGROUND_INTENSITY | contentColor);
 	std::cout << ' ' << tileContent;
 };
 void Console::drawWhiteTile(std::string tileContent, int contentColor) const {
-	SetConsoleTextAttribute(this->hConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | FOREGROUND_INTENSITY | contentColor);
+	SetConsoleTextAttribute(this->hOutConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | FOREGROUND_INTENSITY | contentColor);
 	std::cout << ' ' << tileContent;
 };
 
@@ -37,7 +43,7 @@ void Console::notateHorizontalFrame(std::uint8_t offsetY) const {
 	const std::uint8_t offsetX = 3;
 	const unsigned int boardWidth = this->board.width;
 	COORD cursorPos = { offsetX,offsetY };
-	SetConsoleCursorPosition(this->hConsole, cursorPos);
+	SetConsoleCursorPosition(this->hOutConsole, cursorPos);
 	for (unsigned int i = 0; i < boardWidth; i++) {
 		this->drawWhiteTile(letterNotation(i));
 	}
@@ -48,18 +54,24 @@ void Console::notateSideFrame(std::uint8_t offsetX) const {
 	COORD cursorPos = { offsetX,0 };
 	for (unsigned int i = 0; i < boardHeight; i++) {
 		cursorPos.Y = i + offsetY;
-		SetConsoleCursorPosition(this->hConsole, cursorPos);
+		SetConsoleCursorPosition(this->hOutConsole, cursorPos);
 		this->drawWhiteTile('0' + boardHeight - i);
 		std::cout << ' ';
 	}
 };
 
 void Console::clear() const {
+	DWORD inConsoleMode = 0;
+	DWORD outConsoleMode = 0;
+	GetConsoleMode(this->hInConsole, &inConsoleMode);
+	GetConsoleMode(this->hOutConsole, &outConsoleMode);
 	system("cls");
+	SetConsoleMode(this->hInConsole, inConsoleMode);
+	SetConsoleMode(this->hOutConsole, outConsoleMode);
 }
 
 void Console::prepare() const {
-	SetConsoleMode(this->hConsole, ENABLE_MOUSE_INPUT | ENABLE_WINDOW_INPUT);
+	SetConsoleMode(this->hInConsole, ENABLE_MOUSE_INPUT | ENABLE_WINDOW_INPUT | ENABLE_EXTENDED_FLAGS);
 }
 
 void Console::drawBoard() const {
@@ -69,10 +81,10 @@ void Console::drawBoard() const {
 	const Console& self = *this;
 	self.notateHorizontalFrame(0);
 	self.notateSideFrame(0);
-	COORD cursorPos = { 3,1 };
+	COORD cursorPos = this->actualBoardOffset;
 	unsigned int arrayPos;
 	for (int i = height - 1; i >= 0; i--) {
-		SetConsoleCursorPosition(this->hConsole, cursorPos);
+		SetConsoleCursorPosition(this->hOutConsole, cursorPos);
 		for (int j = 0; j < width; j++) {
 			arrayPos = (i * width + j);
 			Piece* piece = board[arrayPos];
@@ -92,4 +104,37 @@ void Console::drawBoard() const {
 	self.notateSideFrame(3 + 2 * width);
 	self.notateHorizontalFrame(1 + height);
 	std::cout << std::endl;
+}
+
+ConsoleEvent Console::listen() const {
+	DWORD numberOfReadRecords;
+	INPUT_RECORD mouseInput;
+
+	while (true) {
+		ReadConsoleInput(this->hInConsole, &mouseInput, 1, &numberOfReadRecords);
+		switch (mouseInput.EventType) {
+			case KEY_EVENT:
+				std::cout << "Key" << std::endl;
+				break;
+			case MOUSE_EVENT:
+				MOUSE_EVENT_RECORD mouseEvent = mouseInput.Event.MouseEvent;
+				COORD position = mouseEvent.dwMousePosition;
+				if (mouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED && !(mouseEvent.dwEventFlags & MOUSE_MOVED)) {
+					short boardX, boardY;
+					boardX = floor(static_cast<float>(position.X - this->actualBoardOffset.X) / 2);
+					boardY = this->board.height - 1 - (position.Y - this->actualBoardOffset.Y);
+					if (boardX < this->board.width && boardY < this->board.height &&
+						boardX >= 0 && boardY >= 0) {
+						ConsoleEventDataUnion data;
+						data.clickEventData.boardArrayIndex = boardY * this->board.width + boardX;
+						data.clickEventData.boardPosition.X = boardX;
+						data.clickEventData.boardPosition.Y = boardY;
+						return ConsoleEvent(ConsoleEventType::CLICK, data);
+					}
+				}
+				break;
+			case WINDOW_BUFFER_SIZE_EVENT:// TODO Handle resize here
+				break;
+		}
+	}
 }

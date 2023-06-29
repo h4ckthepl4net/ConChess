@@ -9,9 +9,6 @@ class Pawn : public Piece {
 public:
 	Pawn(
 		Color color,
-		Pieces name,
-		PieceIDs id,
-		PieceSymbols symbol,
 		Coords initialCoord,
 		Player& player,
 		Board& board

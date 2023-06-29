@@ -6,12 +6,16 @@
 #include <iostream>
 #include <windows.h>
 
+#include "../headers/utilities/ConsoleEvent.h"
+
 char letterNotation(std::uint8_t num);
 class Board;
 
 class Console {
+	static const COORD actualBoardOffset;
 	Board& board;
-	HANDLE hConsole;
+	HANDLE hOutConsole;
+	HANDLE hInConsole;
 	CONSOLE_SCREEN_BUFFER_INFOEX consoleInfo;
 	unsigned short height;
 	unsigned short width;
@@ -29,11 +33,13 @@ public:
 		unsigned short = 17,
 		unsigned short = 17,
 		HANDLE = nullptr,
+		HANDLE = nullptr,
 		CONSOLE_SCREEN_BUFFER_INFOEX = {}
 	);
 	void prepare() const;
 	void drawBoard() const;
 	void clear() const;
+	ConsoleEvent listen() const;
 };
 
 

@@ -3,17 +3,14 @@
 
 Rook::Rook(
 	Color color,
-	Pieces name,
-	PieceIDs id,
-	PieceSymbols symbol,
 	Coords initialCoord,
 	Player& player,
 	Board& board
 ) :	Piece(
 	color,
-	name,
-	id,
-	symbol,
+	Pieces::ROOK,
+	PieceIDs::ROOK,
+	PieceSymbols::ROOK,
 	initialCoord,
 	player,
 	board

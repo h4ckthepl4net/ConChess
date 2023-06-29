@@ -20,6 +20,11 @@ add_executable (
 
 	"headers/utilities/Color.h"
 	"headers/utilities/Coords.h"
+	"headers/utilities/ConsoleEvent.h"
+	"headers/utilities/ConsoleEventType.h" 
+	"headers/utilities/ClickData.h" 
+	"headers/utilities/ConsoleEventDataUnion.h" 
+	"headers/utilities/KeyData.h"
 	"headers/constants/Pieces.h"
 	"headers/constants/PieceIDs.h"
 	"headers/constants/FieldDeltas.h"
@@ -36,6 +41,7 @@ add_executable (
 	"headers/special-pieces/Knight.h"
 	"headers/special-pieces/Rook.h"
 	"headers/special-pieces/Pawn.h"
+	"headers/special-pieces/PossibleMove.h"
 	
 	"classes/Game.cpp"
 	"classes/Player.cpp" 
@@ -48,7 +54,8 @@ add_executable (
 	"classes/special-pieces/Knight.cpp"
 	"classes/special-pieces/Rook.cpp"
 	"classes/special-pieces/Pawn.cpp"
- )
+	"classes/special-pieces/PossibleMove.cpp"
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ConChess PROPERTY CXX_STANDARD 20)

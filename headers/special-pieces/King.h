@@ -9,9 +9,6 @@ class King : public Piece {
 public:
 	King(
 		Color color,
-		Pieces name,
-		PieceIDs id,
-		PieceSymbols symbol,
 		Player& player,
 		Board& board
 	);

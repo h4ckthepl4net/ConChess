@@ -9,9 +9,6 @@ class Knight : public Piece {
 public:
 	Knight(
 		Color color,
-		Pieces name,
-		PieceIDs id,
-		PieceSymbols symbol,
 		Coords initialCoord,
 		Player& player,
 		Board& board

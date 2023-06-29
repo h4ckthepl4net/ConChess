@@ -9,9 +9,6 @@ class Queen : public Piece {
 public:
 	Queen(
 		Color color,
-		Pieces name,
-		PieceIDs id,
-		PieceSymbols symbol,
 		Player& player,
 		Board& board
 	);

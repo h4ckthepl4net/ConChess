@@ -9,9 +9,6 @@ class Bishop : public Piece {
 public:
 	Bishop(
 		Color color,
-		Pieces name,
-		PieceIDs id,
-		PieceSymbols symbol,
 		Coords initialCoord,
 		Player& player,
 		Board& board

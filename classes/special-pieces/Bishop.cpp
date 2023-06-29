@@ -2,17 +2,14 @@
 
 Bishop::Bishop(
 	Color color,
-	Pieces name,
-	PieceIDs id,
-	PieceSymbols symbol,
 	Coords initialCoord,
 	Player& player,
 	Board& board
 ) :	Piece(
 	color,
-	name,
-	id,
-	symbol,
+	Pieces::BISHOP,
+	PieceIDs::BISHOP,
+	PieceSymbols::BISHOP,
 	initialCoord,
 	player,
 	board

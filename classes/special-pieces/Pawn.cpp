@@ -2,17 +2,14 @@
 
 Pawn::Pawn(
 	Color color,
-	Pieces name,
-	PieceIDs id,
-	PieceSymbols symbol,
 	Coords initialCoord,
 	Player& player,
 	Board& board
 ) :	Piece(
 	color,
-	name,
-	id,
-	symbol,
+	Pieces::PAWN,
+	PieceIDs::PAWN,
+	PieceSymbols::PAWN,
 	initialCoord,
 	player,
 	board,

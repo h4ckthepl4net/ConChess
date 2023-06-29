@@ -33,22 +33,20 @@ void Player::setName(std::string name) {
 }
 
 void Player::initPieces(unsigned char count) {
+	if (count < 16) {
+		throw std::invalid_argument("Piece count cannot be smaller than 16");
+	}
+
 	this->pieces = new Piece*[count];
 
 	this->pieces[0] = new King(
 		this->color,
-		Pieces::KING,
-		PieceIDs::KING,
-		PieceSymbols::KING,
 		*this,
 		*board
 	);
 
 	this->pieces[1] = new Queen(
 		this->color,
-		Pieces::QUEEN,
-		PieceIDs::QUEEN,
-		PieceSymbols::QUEEN,
 		*this,
 		*board
 	);
@@ -57,9 +55,6 @@ void Player::initPieces(unsigned char count) {
 	for (std::uint8_t i = 2; i < 4; i++) {
 		this->pieces[i] = new Bishop(
 			this->color,
-			Pieces::BISHOP,
-			PieceIDs::BISHOP,
-			PieceSymbols::BISHOP,
 			bishopCoords[i - 2],
 			*this,
 			*board
@@ -70,9 +65,6 @@ void Player::initPieces(unsigned char count) {
 	for (std::uint8_t i = 4; i < 6; i++) {
 		this->pieces[i] = new Knight(
 			this->color,
-			Pieces::KNIGHT,
-			PieceIDs::KNIGHT,
-			PieceSymbols::KNIGHT,
 			knightCoords[i-4],
 			*this,
 			*board
@@ -83,9 +75,6 @@ void Player::initPieces(unsigned char count) {
 	for (std::uint8_t i = 6; i < 8; i++) {
 		this->pieces[i] = new Rook(
 			this->color,
-			Pieces::ROOK,
-			PieceIDs::ROOK,
-			PieceSymbols::ROOK,
 			rookCoords[i - 6],
 			*this,
 			*board
@@ -96,9 +85,6 @@ void Player::initPieces(unsigned char count) {
 	for (std::uint8_t i = 8; i < 16; i++) {
 		this->pieces[i] = new Pawn(
 			this->color,
-			Pieces::PAWN,
-			PieceIDs::PAWN,
-			PieceSymbols::PAWN,
 			pawnCoords[i - 8],
 			*this,
 			*board

@@ -9,9 +9,6 @@ class Rook : public Piece {
 public:
 	Rook(
 		Color color,
-		Pieces name,
-		PieceIDs id,
-		PieceSymbols symbol,
 		Coords initialCoord,
 		Player& player,
 		Board& board

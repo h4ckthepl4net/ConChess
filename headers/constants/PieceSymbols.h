@@ -12,6 +12,7 @@ enum class PieceSymbols {
 	BISHOP,
 	KNIGHT,
 	PAWN,
+	POSSIBLE_MOVE,
 };
 
 constexpr const char* PieceSymbolToString(PieceSymbols symbol) {
@@ -22,6 +23,7 @@ constexpr const char* PieceSymbolToString(PieceSymbols symbol) {
 		case PieceSymbols::BISHOP: return "B";
 		case PieceSymbols::KNIGHT: return "N";
 		case PieceSymbols::PAWN: return "P";
+		case PieceSymbols::POSSIBLE_MOVE: return " ";
 		default: throw std::invalid_argument("Invalid PieceSymbols");
 	}
 }

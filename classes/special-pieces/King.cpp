@@ -2,16 +2,13 @@
 
 King::King(
 	Color color,
-	Pieces name,
-	PieceIDs id,
-	PieceSymbols symbol,
 	Player& player,
 	Board& board
 ) : Piece(
 	color,
-	name,
-	id,
-	symbol,
+	Pieces::KING,
+	PieceIDs::KING,
+	PieceSymbols::KING,
 	Fields::E1,
 	player,
 	board

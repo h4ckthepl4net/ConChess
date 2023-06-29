@@ -2,16 +2,13 @@
 
 Queen::Queen(
 	Color color,
-	Pieces name,
-	PieceIDs id,
-	PieceSymbols symbol,
 	Player& player,
 	Board& board
 ) :	Piece(
 	color,
-	name,
-	id,
-	symbol,
+	Pieces::QUEEN,
+	PieceIDs::QUEEN,
+	PieceSymbols::QUEEN,
 	Fields::D1,
 	player,
 	board

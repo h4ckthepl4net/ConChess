@@ -39,7 +39,9 @@ void Game::prepareBoard() {
 
 void Game::start() {
 	this->prepareConsoleForGame();
-	//do {
+	ConsoleEvent event;
+	do {
 		this->board.draw();
-	//} while (true);
+		event = this->console.listen();
+	} while (true);
 }
