@@ -21,6 +21,8 @@ class Board {
 		void placePieces(Piece**, unsigned char);
 		void draw () const;
 		bool move (Coords, Coords);
+		Piece* pieceAt(COORD);
+		Piece* pieceAt(unsigned int);
 
 	friend class Console;
 };

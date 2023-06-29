@@ -66,3 +66,7 @@ bool Piece::move(Coords coords) {
 	}
 	return false;
 }
+
+bool Piece::isOwnedBy(const Player* player) {
+	return player == &this->owner;
+}

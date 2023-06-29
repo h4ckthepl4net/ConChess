@@ -65,6 +65,7 @@ void Console::clear() const {
 	DWORD outConsoleMode = 0;
 	GetConsoleMode(this->hInConsole, &inConsoleMode);
 	GetConsoleMode(this->hOutConsole, &outConsoleMode);
+	SetConsoleTextAttribute(this->hOutConsole, 0);
 	system("cls");
 	SetConsoleMode(this->hInConsole, inConsoleMode);
 	SetConsoleMode(this->hOutConsole, outConsoleMode);

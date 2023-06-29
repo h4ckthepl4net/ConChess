@@ -24,6 +24,7 @@ void Game::preparePlayers() {
 		this->players[i].setColor(static_cast<Color>(i));
 		this->players[i].initPieces();
 	}
+	this->playerToPlay = &this->players[0];
 }
 
 void Game::prepareBoard() {
@@ -42,6 +43,10 @@ void Game::start() {
 	ConsoleEvent event;
 	do {
 		this->board.draw();
-		event = this->console.listen();
+		Piece* clickedPiece = nullptr;
+		do {
+			event = this->console.listen();
+			clickedPiece = this->board.pieceAt(event.data.clickEventData.boardArrayIndex);
+		} while (clickedPiece == nullptr || !clickedPiece->isOwnedBy(this->playerToPlay));
 	} while (true);
 }

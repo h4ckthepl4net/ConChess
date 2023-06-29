@@ -11,6 +11,7 @@
 class Game {
 	Board board;
 	Console console;
+	Player* playerToPlay;
 	Player* players;
 	unsigned char playerCount;
 

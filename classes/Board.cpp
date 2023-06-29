@@ -31,3 +31,17 @@ void Board::draw() const {
 bool Board::move(Coords from, Coords to) {
 	return false;
 }
+
+Piece* Board::pieceAt(unsigned int index) {
+	if (index >= this->width * this->height) {
+		throw std::invalid_argument("Invalid board index");
+	}
+	return this->board[index];
+}
+
+Piece* Board::pieceAt(COORD coords) {
+	if (coords.X >= this->width || coords.Y >= this->height) {
+		throw std::invalid_argument("Invalid board coords");
+	}
+	return this->board[coords.Y * this->height + coords.X];
+}

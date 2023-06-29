@@ -44,6 +44,7 @@ public:
 	bool move(Coords coords);
 	bool isWhite();
 	bool isBlack();
+	bool isOwnedBy(const Player* player);
 	int getConsoleColor();
 	Coords getCoords();
 };
