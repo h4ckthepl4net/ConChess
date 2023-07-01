@@ -35,12 +35,11 @@ void Board::draw(bool wasMove) const {
 	this->console.drawBoard(wasMove);
 }
 
-bool Board::move(Coords from, Coords to) {
+Piece* Board::move(Coords from, Coords to) {
 	const unsigned short initialIndex = from.x + from.y * this->width;
 	const unsigned short finalIndex = to.x + to.y * this->width;
 	Piece* pieceToMove = this->board[initialIndex].removePiece();
-	this->board[finalIndex].setPiece(pieceToMove);
-	return true;
+	return this->board[finalIndex].setPiece(pieceToMove);
 }
 
 Piece* Board::pieceAt(unsigned short index) const {

@@ -25,8 +25,10 @@ bool Slot::isEmpty() const {
 	return !this->piece;
 }
 
-void Slot::setPiece(Piece* piece) {
+Piece* Slot::setPiece(Piece* piece) {
+	Piece* oldPiece = this->piece;
 	this->piece = piece;
+	return oldPiece;
 }
 
 Piece* Slot::getPiece() const {

@@ -23,7 +23,7 @@ class Board {
 		void placePieces(Piece**, unsigned char);
 		Piece* removePiece(Coords);
 		void draw (bool wasMove = false) const;
-		bool move (Coords, Coords);
+		Piece* move (Coords, Coords);
 		Piece* pieceAt(COORD) const;
 		Piece* pieceAt(unsigned short) const;
 		bool click(COORD);

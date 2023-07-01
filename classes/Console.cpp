@@ -135,9 +135,7 @@ void Console::drawPlayerStats(Player* players, unsigned int count) const {
 		Color color = player.getColor();
 		std::string colorName = colors[static_cast<unsigned int>(color)];
 		std::cout << " (" << colorName << ") " << name;
-		if (score > 0) {
-			std::cout << " | (" << score << ")";
-		}
+		std::cout << " | Score: " << score;
 		if (eatenCount > 0) {
 			std::cout << " | Has eaten (" << points << " Points) (" << eatenCount << " Pieces)";
 		}

@@ -72,10 +72,13 @@ Coords Piece::addDelta(Coords delta) {
 
 bool Piece::move(Coords coords) {
 	if (this->canMove(coords)) {
-		this->board.move(this->coords, coords);
+		Piece* eatenPiece = this->board.move(this->coords, coords);
 		this->coords = coords;
 		this->isMoved = true;
 		this->cyclesStandingWithoutAMove = 0;
+		if (eatenPiece) {
+			this->owner.addEatenPiece(eatenPiece);
+		}
 		return true;
 	}
 	return false;

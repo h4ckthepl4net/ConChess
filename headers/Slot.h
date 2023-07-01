@@ -16,7 +16,7 @@ class Slot {
 		Slot(Coords);
 		Slot(Coords, Piece*);
 		Piece* getPiece() const;
-		void setPiece(Piece*);
+		Piece* setPiece(Piece*);
 		void setCoords(const Coords&);
 		Piece* removePiece();
 		bool isEmpty() const;
