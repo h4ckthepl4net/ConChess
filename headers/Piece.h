@@ -18,6 +18,7 @@ class Board;
 
 class Piece {
 protected:
+	bool isMoved = false;
 	Color color;
 	std::string name;
 	std::string id;
@@ -36,17 +37,22 @@ public:
 		Board& board,
 		bool isSecondLine = false
 	);
-	std::string getSymbol();
+	std::string getId();
+	virtual std::string getSymbol();
 	virtual Coords* getAvailableMoves() const = 0;
 	virtual bool canMove(Coords coords) const = 0;
+	virtual int getConsoleColor();
 	virtual ~Piece() = default;
 	Coords addDelta(Coords);
 	bool move(Coords coords);
 	bool isWhite();
 	bool isBlack();
+	bool isUnknown();
 	bool isOwnedBy(const Player* player);
-	int getConsoleColor();
+	Player& getOwner();
+	Board& getBoard();
 	Coords getCoords();
+	bool hasMoved();
 };
 
 #endif // !PIECE_H

@@ -7,6 +7,7 @@
 #include <windows.h>
 
 #include "../headers/utilities/ConsoleEvent.h"
+#include "../headers/Player.h"
 
 char letterNotation(std::uint8_t num);
 class Board;
@@ -20,6 +21,7 @@ class Console {
 	unsigned short height;
 	unsigned short width;
 
+	void drawRawTile(std::string = " ", int = 0) const;
 	void drawBlackTile(std::string = " ", int = 0) const;
 	void drawWhiteTile(std::string = " ", int = 0) const;
 	void drawBlackTile(char = ' ', int = 0) const;
@@ -38,6 +40,7 @@ public:
 	);
 	void prepare() const;
 	void drawBoard() const;
+	void drawPlayerStats(Player*, unsigned int) const;
 	void clear() const;
 	ConsoleEvent listen() const;
 };

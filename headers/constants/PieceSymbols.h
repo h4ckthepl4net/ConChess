@@ -15,7 +15,7 @@ enum class PieceSymbols {
 	POSSIBLE_MOVE,
 };
 
-constexpr const char* PieceSymbolToString(PieceSymbols symbol) {
+constexpr const char* pieceSymbolToString(PieceSymbols symbol) {
 	switch (symbol) {
 		case PieceSymbols::KING: return "K";
 		case PieceSymbols::QUEEN: return "Q";

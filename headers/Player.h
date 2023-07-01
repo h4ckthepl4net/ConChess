@@ -7,6 +7,8 @@
 
 #include "Piece.h"
 
+#include "utilities/PlayerStats.h"
+
 #include "constants/Pieces.h"
 #include "constants/PieceIDs.h"
 #include "constants/PieceSymbols.h"
@@ -26,8 +28,10 @@ class Player {
 	unsigned char piecesCount = 16;
 	Board* board = nullptr;
 public:
+	PlayerStats stats;
 	Player(std::string = "");
 	std::string getName();
+	Color getColor();
 	Piece* getKing();
 	Piece** getPieces();
 	unsigned char getPiecesCount();

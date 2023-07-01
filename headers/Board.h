@@ -5,11 +5,13 @@
 
 #include "Console.h"
 #include "Piece.h"
+#include "Slot.h"
 
 class Board {
-	Piece** board = nullptr;
+	Slot* board = nullptr;
 	Piece* pieces = nullptr;
 	unsigned short piecesCount = 32;
+	Piece* selectedPiece = nullptr;
 	unsigned short width;
 	unsigned short height;
 
@@ -22,7 +24,12 @@ class Board {
 		void draw () const;
 		bool move (Coords, Coords);
 		Piece* pieceAt(COORD);
-		Piece* pieceAt(unsigned int);
+		Piece* pieceAt(unsigned short);
+		bool click(COORD);
+		bool click(unsigned short);
+		bool isPieceSelected();
+		short getHeight();
+		short getWidth();
 
 	friend class Console;
 };

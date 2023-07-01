@@ -8,6 +8,10 @@ std::string Player::getName() {
 	return this->name;
 }
 
+Color Player::getColor() {
+	return this->color;
+}
+
 Piece* Player::getKing() {
 	return this->king;
 }
@@ -39,11 +43,13 @@ void Player::initPieces(unsigned char count) {
 
 	this->pieces = new Piece*[count];
 
-	this->pieces[0] = new King(
+	this->king = new King(
 		this->color,
 		*this,
 		*board
 	);
+
+	this->pieces[0] = this->king;
 
 	this->pieces[1] = new Queen(
 		this->color,

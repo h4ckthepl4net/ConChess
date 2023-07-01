@@ -10,7 +10,7 @@ struct ConsoleEvent {
 	ConsoleEventType type;
 	ConsoleEventDataUnion data;
 
-	ConsoleEvent() = default;
+	ConsoleEvent() : type(ConsoleEventType::UNKNOWN) {};
 	ConsoleEvent(ConsoleEventType type, ConsoleEventDataUnion data) : type(type), data(data) {}
 };
 

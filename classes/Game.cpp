@@ -22,6 +22,7 @@ void Game::preparePlayers() {
 		std::cin >> name;
 		this->players[i].setName(name);
 		this->players[i].setColor(static_cast<Color>(i));
+		this->players[i].setBoard(&this->board);
 		this->players[i].initPieces();
 	}
 	this->playerToPlay = &this->players[0];
@@ -43,10 +44,19 @@ void Game::start() {
 	ConsoleEvent event;
 	do {
 		this->board.draw();
+		this->console.drawPlayerStats(this->players, this->playerCount);
 		Piece* clickedPiece = nullptr;
 		do {
 			event = this->console.listen();
 			clickedPiece = this->board.pieceAt(event.data.clickEventData.boardArrayIndex);
-		} while (clickedPiece == nullptr || !clickedPiece->isOwnedBy(this->playerToPlay));
+		} while (!this->board.isPieceSelected() &&
+				(clickedPiece == nullptr || !clickedPiece->isOwnedBy(this->playerToPlay)));
+		bool wasMove = this->board.click(event.data.clickEventData.boardArrayIndex);
+		if (wasMove) {
+			const std::uint8_t currentIndex = static_cast<std::uint8_t>(this->playerToPlay - this->players);
+			const std::uint8_t nextPlayer = currentIndex != 0 ? currentIndex % (this->playerCount-1) : currentIndex + 1;
+			this->playerToPlay = this->players + nextPlayer;
+		}
+
 	} while (true);
 }

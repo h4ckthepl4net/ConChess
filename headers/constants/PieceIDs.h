@@ -15,7 +15,7 @@ enum class PieceIDs {
 	POSSIBLE_MOVE,
 };
 
-constexpr const char* PieceIDsToString(PieceIDs id) {
+constexpr const char* pieceIDsToString(PieceIDs id) {
 	switch (id) {
 		case PieceIDs::KING: return "K";
 		case PieceIDs::QUEEN: return "Q";

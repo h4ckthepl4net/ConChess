@@ -10,7 +10,7 @@ union ConsoleEventDataUnion {
 	ClickData clickEventData;
 	KeyData keyEventData;
 
-	ConsoleEventDataUnion() {};
+	ConsoleEventDataUnion() : clickEventData(0,0,0) {};
 };
 
 #endif

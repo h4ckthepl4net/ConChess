@@ -15,7 +15,7 @@ enum class Pieces {
 	POSSIBLE_MOVE,
 };
 
-constexpr const char* PiecesToString(Pieces piece) {
+constexpr const char* piecesToString(Pieces piece) {
 	switch (piece) {
 		case Pieces::KING: return "King";
 		case Pieces::QUEEN: return "Queen";

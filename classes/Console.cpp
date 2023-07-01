@@ -23,15 +23,16 @@ Console::Console(
 	}
 }
 
-void Console::drawBlackTile(std::string tileContent, int contentColor) const {
-	SetConsoleTextAttribute(this->hOutConsole, FOREGROUND_INTENSITY | contentColor);
+void Console::drawRawTile(std::string tileContent, int contentColor) const {
+	SetConsoleTextAttribute(this->hOutConsole, contentColor);
 	std::cout << ' ' << tileContent;
+};
+void Console::drawBlackTile(std::string tileContent, int contentColor) const {
+	this->drawRawTile(tileContent, FOREGROUND_INTENSITY | contentColor);
 };
 void Console::drawWhiteTile(std::string tileContent, int contentColor) const {
-	SetConsoleTextAttribute(this->hOutConsole, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | FOREGROUND_INTENSITY | contentColor);
-	std::cout << ' ' << tileContent;
+	this->drawRawTile(tileContent, BACKGROUND_BLUE | BACKGROUND_GREEN | BACKGROUND_RED | FOREGROUND_INTENSITY | contentColor);
 };
-
 void Console::drawBlackTile(char tileContent, int contentColor) const {
 	this->drawBlackTile(std::string(1, tileContent), contentColor);
 };
@@ -78,7 +79,7 @@ void Console::prepare() const {
 void Console::drawBoard() const {
 	const unsigned int width = this->board.width;
 	const unsigned int height = this->board.height;
-	Piece** board = this->board.board;
+	Slot* board = this->board.board;
 	const Console& self = *this;
 	self.notateHorizontalFrame(0);
 	self.notateSideFrame(0);
@@ -86,15 +87,20 @@ void Console::drawBoard() const {
 	unsigned int arrayPos;
 	for (int i = height - 1; i >= 0; i--) {
 		SetConsoleCursorPosition(this->hOutConsole, cursorPos);
-		for (int j = 0; j < width; j++) {
+		for (unsigned int j = 0; j < width; j++) {
 			arrayPos = (i * width + j);
-			Piece* piece = board[arrayPos];
+			Piece* piece = board[arrayPos].getPiece();
+			std::string identifier = piece ? piece->getId() : "";
 			std::string symbol = piece ? piece->getSymbol() : " ";
 			int color = piece ? piece->getConsoleColor() : 0;
-			if ((i + j) % 2 == 0) {
-				self.drawBlackTile(symbol, color);
+			if (identifier == pieceIDsToString(PieceIDs::POSSIBLE_MOVE)) {
+				self.drawRawTile(symbol, color);
 			} else {
-				self.drawWhiteTile(symbol, color);
+				if ((i + j) % 2 == 0) {
+					self.drawBlackTile(symbol, color);
+				} else {
+					self.drawWhiteTile(symbol, color);
+				}
 			}
 			if (j == width - 1) {
 				cursorPos.Y++;
@@ -107,6 +113,28 @@ void Console::drawBoard() const {
 	std::cout << std::endl;
 }
 
+void Console::drawPlayerStats(Player* players, unsigned int count) const {
+	std::cout << std::endl;
+	const char* colors[2] = { "W", "B" };
+	const Console& self = *this;
+	for (unsigned int i = 0; i < count; i++) {
+		Player& player = players[i];
+		std::string name = player.getName();
+		int score = player.stats.score;
+		int points = player.stats.eatenPoints;
+		Color color = player.getColor();
+		std::string colorName = colors[static_cast<unsigned int>(color)];
+		std::cout << " (" << colorName << ") " << name;
+		if (score > 0) {
+			std::cout << "(" << score << ")";
+		}
+		if (points > 0) {
+			std::cout << " | Has eaten (" << points << ")";
+		}
+		std::cout << "  " << std::endl;
+	}
+}
+
 ConsoleEvent Console::listen() const {
 	DWORD numberOfReadRecords;
 	INPUT_RECORD mouseInput;
@@ -115,14 +143,14 @@ ConsoleEvent Console::listen() const {
 		ReadConsoleInput(this->hInConsole, &mouseInput, 1, &numberOfReadRecords);
 		switch (mouseInput.EventType) {
 			case KEY_EVENT:
-				std::cout << "Key" << std::endl;
+				// TODO handle this event or disregard
 				break;
 			case MOUSE_EVENT:
 				MOUSE_EVENT_RECORD mouseEvent = mouseInput.Event.MouseEvent;
 				COORD position = mouseEvent.dwMousePosition;
 				if (mouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED && !(mouseEvent.dwEventFlags & MOUSE_MOVED)) {
 					short boardX, boardY;
-					boardX = floor(static_cast<float>(position.X - this->actualBoardOffset.X) / 2);
+					boardX = static_cast<short>(floor(static_cast<float>(position.X - this->actualBoardOffset.X) / 2));
 					boardY = this->board.height - 1 - (position.Y - this->actualBoardOffset.Y);
 					if (boardX < this->board.width && boardY < this->board.height &&
 						boardX >= 0 && boardY >= 0) {

@@ -24,5 +24,5 @@ Coords* Pawn::getAvailableMoves() const {
 
 bool Pawn::canMove(Coords coords) const {
 	// TODO implement
-	return false;
+	return true;
 }
