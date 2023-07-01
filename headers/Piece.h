@@ -63,7 +63,7 @@ public:
 	Coords getCoords();
 	Coords getDelta(const Coords& coords) const;
 	Coords getColorBasedDelta(const Coords& coords) const;
-	bool hasMoved();
+	bool hasMoved() const;
 	int getCycles();
 	int getNoMoveCycles();
 	bool isSameColor(Piece* piece) const;

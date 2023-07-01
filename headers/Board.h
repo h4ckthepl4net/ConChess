@@ -26,6 +26,8 @@ class Board {
 		Piece* move (Coords, Coords);
 		Piece* pieceAt(COORD) const;
 		Piece* pieceAt(unsigned short) const;
+		//bool isAttacked(COORD) const;
+		//bool isAttacked(unsigned short) const;
 		bool click(COORD);
 		bool click(unsigned short);
 		bool isPieceSelected();

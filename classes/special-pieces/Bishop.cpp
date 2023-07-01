@@ -24,11 +24,29 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves() const {
 }
 
 bool Bishop::canMove(Coords coords) const {
-	// TODO implement
+	if (this->isMoveAlgorithmSatisfied(coords)) {
+		Coords delta = this->getDelta(coords);
+		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
+		if (piece && !this->isSameColor(piece) || !piece) {
+			if (delta.x && delta.y) {
+				const char xStart = delta.x < 0 ? coords.x : this->coords.x;
+				const char xEnd = delta.x >= 0 ? coords.x : this->coords.x;
+				const char yStart = delta.y >= 0 ? coords.y : this->coords.y;
+				const char yEnd = delta.y < 0 ? coords.y : this->coords.y;
+				for (char i = xStart + 1, j = yStart + 1; i < xEnd && j < yEnd; i++, j++) {
+					Piece* p = this->board.pieceAt({ i, j });
+					if (p) {
+						return false;
+					}
+				}
+				return true;
+			}
+		}
+	}
 	return false;
 }
 
 bool Bishop::isMoveAlgorithmSatisfied(const Coords& coords) const {
-	// TODO implement
-	return false;
+	Coords delta = this->getDelta(coords);
+	return abs(delta.x) == abs(delta.y);
 }

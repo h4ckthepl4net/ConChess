@@ -32,7 +32,7 @@ bool Rook::canMove(Coords coords) const {
 			if (delta.x) {
 				const char start = delta.x < 0 ? coords.x : this->coords.x;
 				const char end = delta.x >= 0 ? coords.x : this->coords.x;
-				for (char i = start + 1; i != end - 1; i++) {
+				for (char i = start + 1; i < end; i++) {
 					if (this->board.pieceAt({ i, this->coords.y })) {
 						return false;
 					}
@@ -40,7 +40,7 @@ bool Rook::canMove(Coords coords) const {
 			} else if (delta.y) {
 				const char start = delta.y < 0 ? coords.y : this->coords.y;
 				const char end = delta.y >= 0 ? coords.y : this->coords.y;
-				for (char i = start + 1; i != end - 1; i++) {
+				for (char i = start + 1; i < end; i++) {
 					if (this->board.pieceAt({ this->coords.x, i })) {
 						return false;
 					}

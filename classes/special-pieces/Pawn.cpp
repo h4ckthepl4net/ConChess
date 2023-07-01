@@ -67,7 +67,7 @@ bool Pawn::isMoveAlgorithmSatisfied(const Coords& coords) const {
 	if (delta.x >= -1 && delta.x <= 1) {
 		isXRangeSatisfied = true;
 	}
-	if (!this->isMoved && delta.y == 2 && delta.x == 0 || delta.y == 1) {
+	if (!this->hasMoved() && delta.y == 2 && delta.x == 0 || delta.y == 1) {
 		isYRangeSatisfied = true;
 	}
 	return isXRangeSatisfied && isYRangeSatisfied;

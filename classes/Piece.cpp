@@ -96,7 +96,7 @@ Board& Piece::getBoard() {
 	return this->board;
 }
 
-bool Piece::hasMoved() {
+bool Piece::hasMoved() const {
 	return this->isMoved;
 }
 
