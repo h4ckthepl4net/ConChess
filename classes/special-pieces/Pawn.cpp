@@ -26,39 +26,36 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves() const {
 	int availableMovesCount = 0;
 	char forwardPieceX = coords.x;
 	char forwardPieceY = coords.y + coef;
-	Piece* forwardPiece = this->board.pieceAt({ forwardPieceX, forwardPieceY });
-	if (coords.y + coef >= 0 && coords.y + coef < this->board.getHeight() && !forwardPiece) {
-		availableMoves[availableMovesCount] = { coords.y + coef, coords.x };
+	Coords forwardCoords = { forwardPieceY, forwardPieceX };
+	bool canMoveForward = this->canMove(forwardCoords);
+	if (canMoveForward) {
+		availableMoves[availableMovesCount] = forwardCoords;
 		availableMovesCount++;
 	}
-	if (coords.y + coef * 2 >= 0 && coords.y + coef * 2 < this->board.getHeight() && !this->hasMoved()) {
-		char doubleForwardPieceX = coords.x;
-		char doubleForwardPieceY = coords.y + coef * 2;
-		Piece* doubleForwardPiece = this->board.pieceAt({ doubleForwardPieceX, doubleForwardPieceY });
-		if (!doubleForwardPiece && !forwardPiece) {
-			availableMoves[availableMovesCount] = { coords.y + coef * 2, coords.x };
-			availableMovesCount++;
-		}
+	char doubleForwardPieceX = coords.x;
+	char doubleForwardPieceY = coords.y + coef * 2;
+	Coords doubleForwardCoords = { doubleForwardPieceY, doubleForwardPieceX };
+	if (this->canMove(doubleForwardCoords) && canMoveForward) {
+		availableMoves[availableMovesCount] = doubleForwardCoords;
+		availableMovesCount++;
 	}
 	if (coords.x > 0) {
 		char leftPieceX = coords.x - 1;
 		char leftForwardPieceY = coords.y + coef;
-		Piece* leftForwardPiece = this->board.pieceAt({ leftPieceX, leftForwardPieceY });
-		Pawn* leftPiece = static_cast<Pawn*>(this->board.pieceAt({ leftPieceX, coords.y }));
-		if (leftForwardPiece && !this->isSameColor(leftForwardPiece) ||
-			leftPiece && !this->isSameColor(leftPiece) && leftPiece->isOpenToEmpassant && leftPiece->getNoMoveCycles() == 1) {
-			availableMoves[availableMovesCount] = { leftForwardPieceY, leftPieceX };
+		Coords leftForwardCoords = { leftForwardPieceY, leftPieceX };
+		Coords leftCoords = { coords.y, leftPieceX };
+		if (this->canMove(leftForwardCoords) || this->canMove(leftCoords)) {
+			availableMoves[availableMovesCount] = leftForwardCoords;
 			availableMovesCount++;
 		}
 	}
 	if (coords.x < this->board.getWidth() - 1) {
 		char rightPieceX = coords.x + 1;
 		char rightForwardPieceY = coords.y + coef;
-		Piece* rightForwardPiece = this->board.pieceAt({ rightPieceX, rightForwardPieceY });
-		Pawn* rightPiece = static_cast<Pawn*>(this->board.pieceAt({ rightPieceX, coords.y }));
-		if (rightForwardPiece && !this->isSameColor(rightForwardPiece) ||
-			rightPiece && !this->isSameColor(rightPiece) && rightPiece->isOpenToEmpassant && rightPiece->getNoMoveCycles() == 1) {
-			availableMoves[availableMovesCount] = { rightForwardPieceY, rightPieceX };
+		Coords rightForwardCoords = { rightForwardPieceY, rightPieceX };
+		Coords rightPiece = { coords.y, rightPieceX };
+		if (this->canMove(rightForwardCoords) || this->canMove(rightPiece)) {
+			availableMoves[availableMovesCount] = rightForwardCoords;
 			availableMovesCount++;
 		}
 	}
@@ -66,9 +63,21 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves() const {
 }
 
 bool Pawn::move(Coords coords) {
-	Coords delta = this->getColorBasedDelta(coords);
+	Coords delta = this->getDelta(coords);
+	
+	Piece* targetCell = this->board.pieceAt({ coords.x, coords.y });
+	char besidePieceX = this->coords.x + delta.x;
+	char besidePieceY = this->coords.y;
+	Piece* besideCell = this->board.pieceAt({ besidePieceX, besidePieceY });
+
 	bool result = Piece::move(coords);
-	this->isOpenToEmpassant = delta.y == 2 && result;
+	this->isOpenToEmpassant = abs(delta.y) == 2 && result;
+
+	if (besideCell && !this->isSameColor(besideCell) && abs(delta.x) == 1 && abs(delta.y) == 1 && !targetCell && result) {
+		Piece* eatenPiece = this->board.removePiece(besideCell->getCoords());
+		this->owner.addEatenPiece(eatenPiece);
+	}
+	
 	return result;
 }
 
@@ -86,12 +95,7 @@ bool Pawn::canMove(Coords coords) const {
 			if (pieceBeside && 
 				pieceBeside->getId() == pieceIDsToString(PieceIDs::PAWN)) {
 				Pawn* pawnBeside = static_cast<Pawn*>(pieceBeside);
-				bool canEat = pawnBeside->isOpenToEmpassant && pawnBeside->getNoMoveCycles() == 1;
-				if (canEat) {
-					Piece* eatenPiece = this->board.removePiece(pawnBeside->getCoords());
-					this->owner.addEatenPiece(eatenPiece);
-				}
-				return canEat;
+				return pawnBeside->isOpenToEmpassant && pawnBeside->getNoMoveCycles() == 1;
 			}
 		}
 		else if (!piece) {
