@@ -19,8 +19,33 @@ Knight::Knight(
 }
 
 std::pair<Coords*, unsigned int> Knight::getAvailableMoves() const {
-	// TODO implement
-	return std::pair(nullptr, 0);
+	Coords* availableMoves = new Coords[8];
+	unsigned int availableMovesCount = 0;
+	for (char i = -1; i <= 1; i+=2) {
+		for (char j = -2; j <= 2; j+=4) {
+			if (i && j && abs(i) != abs(j)) {
+				Coords coords = { this->coords.y + j, this->coords.x + i };
+				if (coords.x >= 0 && coords.y >= 0 &&
+					coords.x < this->board.getWidth() && coords.y < this->board.getHeight() &&
+					this->canMove(coords)) {
+					availableMoves[availableMovesCount++] = coords;
+				}
+			}
+		}
+	}
+	for (char i = -1; i <= 1; i += 2) {
+		for (char j = -2; j <= 2; j += 4) {
+			if (i && j && abs(i) != abs(j)) {
+				Coords coords = { this->coords.y + i, this->coords.x + j };
+				if (coords.x >= 0 && coords.y >= 0 &&
+					coords.x < this->board.getWidth() && coords.y < this->board.getHeight() &&
+					this->canMove(coords)) {
+					availableMoves[availableMovesCount++] = coords;
+				}
+			}
+		}
+	}
+	return std::pair(availableMoves, availableMovesCount);
 }
 
 bool Knight::canMove(Coords coords) const {
