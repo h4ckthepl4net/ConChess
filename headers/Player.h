@@ -39,6 +39,7 @@ public:
 	void setColor(Color);
 	void setName(std::string);
 	void initPieces(unsigned char = 16);
+	void addEatenPiece(Piece*);
 	~Player();
 };
 

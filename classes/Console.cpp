@@ -76,7 +76,7 @@ void Console::prepare() const {
 	SetConsoleMode(this->hInConsole, ENABLE_MOUSE_INPUT | ENABLE_WINDOW_INPUT | ENABLE_EXTENDED_FLAGS);
 }
 
-void Console::drawBoard() const {
+void Console::drawBoard(bool wasMove) const {
 	const unsigned int width = this->board.width;
 	const unsigned int height = this->board.height;
 	Slot* board = this->board.board;
@@ -90,9 +90,18 @@ void Console::drawBoard() const {
 		for (unsigned int j = 0; j < width; j++) {
 			arrayPos = (i * width + j);
 			Piece* piece = board[arrayPos].getPiece();
-			std::string identifier = piece ? piece->getId() : "";
-			std::string symbol = piece ? piece->getSymbol() : " ";
-			int color = piece ? piece->getConsoleColor() : 0;
+			std::string identifier = "";
+			std::string symbol = " ";
+			int color = 0;
+			if (piece) {
+				if (wasMove) {
+					piece->incrementNoMoveCycles();
+					piece->incrementCycles();
+				}
+				identifier = piece->getId();
+				symbol = piece->getSymbol();
+				color = piece->getConsoleColor();
+			}
 			if (identifier == pieceIDsToString(PieceIDs::POSSIBLE_MOVE)) {
 				self.drawRawTile(symbol, color);
 			} else {
@@ -122,14 +131,15 @@ void Console::drawPlayerStats(Player* players, unsigned int count) const {
 		std::string name = player.getName();
 		int score = player.stats.score;
 		int points = player.stats.eatenPoints;
+		int eatenCount = player.stats.eatenPiecesCount;
 		Color color = player.getColor();
 		std::string colorName = colors[static_cast<unsigned int>(color)];
 		std::cout << " (" << colorName << ") " << name;
 		if (score > 0) {
-			std::cout << "(" << score << ")";
+			std::cout << " | (" << score << ")";
 		}
-		if (points > 0) {
-			std::cout << " | Has eaten (" << points << ")";
+		if (eatenCount > 0) {
+			std::cout << " | Has eaten (" << points << " Points) (" << eatenCount << " Pieces)";
 		}
 		std::cout << "  " << std::endl;
 	}

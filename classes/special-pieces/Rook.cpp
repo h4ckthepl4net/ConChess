@@ -11,18 +11,24 @@ Rook::Rook(
 	Pieces::ROOK,
 	PieceIDs::ROOK,
 	PieceSymbols::ROOK,
+	PiecePoints::ROOK,
 	initialCoord,
 	player,
 	board
 ) {
 }
 
-Coords* Rook::getAvailableMoves() const {
+std::pair<Coords*, unsigned int> Rook::getAvailableMoves() const {
 	// TODO implement
-	return nullptr;
+	return std::pair(nullptr, 0);
 }
 
 bool Rook::canMove(Coords coords) const {
+	// TODO implement
+	return false;
+}
+
+bool Rook::isMoveAlgorithmSatisfied(const Coords& coords) const {
 	// TODO implement
 	return false;
 }

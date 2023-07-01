@@ -30,9 +30,9 @@ void Board::placePieces(Piece** pieces, unsigned char count) {
 	}
 }
 
-void Board::draw() const {
+void Board::draw(bool wasMove) const {
 	this->console.clear();
-	this->console.drawBoard();
+	this->console.drawBoard(wasMove);
 }
 
 bool Board::move(Coords from, Coords to) {
@@ -43,14 +43,14 @@ bool Board::move(Coords from, Coords to) {
 	return true;
 }
 
-Piece* Board::pieceAt(unsigned short index) {
+Piece* Board::pieceAt(unsigned short index) const {
 	if (index >= this->width * this->height) {
 		throw std::invalid_argument("Invalid board index");
 	}
 	return this->board[index].getPiece();
 }
 
-Piece* Board::pieceAt(COORD coords) {
+Piece* Board::pieceAt(COORD coords) const {
 	if (coords.X >= this->width || coords.Y >= this->height) {
 		throw std::invalid_argument("Invalid board coords");
 	}
@@ -67,9 +67,9 @@ bool Board::click(unsigned short index) {
 	} else if (this->selectedPiece) {
 		char x = index % this->width;
 		char y = index / this->width;
-		this->selectedPiece->move({ y, x });
+		bool wasMove = this->selectedPiece->move({ y, x });
 		this->selectedPiece = nullptr;
-		return true;
+		return wasMove;
 	}
 	return false;
 }
@@ -91,4 +91,9 @@ short Board::getHeight() {
 
 short Board::getWidth() {
 	return this->width;
+}
+
+Piece* Board::removePiece(Coords coords) {
+	const unsigned short index = coords.x + coords.y * this->width;
+	return this->board[index].removePiece();
 }

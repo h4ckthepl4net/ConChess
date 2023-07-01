@@ -12,8 +12,9 @@ public:
 		Player& player,
 		Board& board
 	);
-	Coords* getAvailableMoves() const override;
+	std::pair<Coords*, unsigned int> getAvailableMoves() const override;
 	bool canMove(Coords coord) const override;
+	bool isMoveAlgorithmSatisfied(const Coords& coord) const override;
 };
 
 #endif

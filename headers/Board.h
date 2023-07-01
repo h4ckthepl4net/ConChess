@@ -21,10 +21,11 @@ class Board {
 		Board (Console&, unsigned short = 8, unsigned short = 8);
 		void initBoard ();
 		void placePieces(Piece**, unsigned char);
-		void draw () const;
+		Piece* removePiece(Coords);
+		void draw (bool wasMove = false) const;
 		bool move (Coords, Coords);
-		Piece* pieceAt(COORD);
-		Piece* pieceAt(unsigned short);
+		Piece* pieceAt(COORD) const;
+		Piece* pieceAt(unsigned short) const;
 		bool click(COORD);
 		bool click(unsigned short);
 		bool isPieceSelected();

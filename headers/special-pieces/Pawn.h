@@ -6,6 +6,7 @@
 #include "../Piece.h"
 
 class Pawn : public Piece {
+	bool isOpenToEmpassant = false;
 public:
 	Pawn(
 		Color color,
@@ -13,8 +14,11 @@ public:
 		Player& player,
 		Board& board
 	);
-	Coords* getAvailableMoves() const override;
-	bool canMove(Coords coord) const override;
+	std::pair<Coords*, unsigned int> getAvailableMoves() const override;
+	bool move(Coords) override;
+	bool canMove(Coords) const override;
+	bool isMoveAlgorithmSatisfied(const Coords&) const override;
+	void incrementNoMoveCycles() override;
 };
 
 #endif

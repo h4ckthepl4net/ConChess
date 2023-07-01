@@ -10,18 +10,24 @@ Bishop::Bishop(
 	Pieces::BISHOP,
 	PieceIDs::BISHOP,
 	PieceSymbols::BISHOP,
+	PiecePoints::BISHOP,
 	initialCoord,
 	player,
 	board
 ) {
 }
 
-Coords* Bishop::getAvailableMoves() const {
+std::pair<Coords*, unsigned int> Bishop::getAvailableMoves() const {
 	// TODO implement
-	return nullptr;
+	return std::pair(nullptr, 0);
 }
 
 bool Bishop::canMove(Coords coords) const {
+	// TODO implement
+	return false;
+}
+
+bool Bishop::isMoveAlgorithmSatisfied(const Coords& coords) const {
 	// TODO implement
 	return false;
 }

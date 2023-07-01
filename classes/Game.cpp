@@ -42,8 +42,9 @@ void Game::prepareBoard() {
 void Game::start() {
 	this->prepareConsoleForGame();
 	ConsoleEvent event;
+	bool wasMove = false;
 	do {
-		this->board.draw();
+		this->board.draw(wasMove);
 		this->console.drawPlayerStats(this->players, this->playerCount);
 		Piece* clickedPiece = nullptr;
 		do {
@@ -51,7 +52,7 @@ void Game::start() {
 			clickedPiece = this->board.pieceAt(event.data.clickEventData.boardArrayIndex);
 		} while (!this->board.isPieceSelected() &&
 				(clickedPiece == nullptr || !clickedPiece->isOwnedBy(this->playerToPlay)));
-		bool wasMove = this->board.click(event.data.clickEventData.boardArrayIndex);
+		wasMove = this->board.click(event.data.clickEventData.boardArrayIndex);
 		if (wasMove) {
 			const std::uint8_t currentIndex = static_cast<std::uint8_t>(this->playerToPlay - this->players);
 			const std::uint8_t nextPlayer = currentIndex != 0 ? currentIndex % (this->playerCount-1) : currentIndex + 1;

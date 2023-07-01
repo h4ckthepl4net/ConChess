@@ -98,6 +98,21 @@ void Player::initPieces(unsigned char count) {
 	}
 }
 
+void Player::addEatenPiece(Piece* piece) {
+	Piece** oldPtr = this->stats.eatenPieces;
+	this->stats.eatenPiecesCount++;
+	this->stats.eatenPieces = new Piece*[this->stats.eatenPiecesCount];
+	if (oldPtr) {
+		for (unsigned int i = 0; i < this->stats.eatenPiecesCount - 1; i++) {
+			this->stats.eatenPieces[i] = oldPtr[i];
+		}
+		delete[] oldPtr;
+	}
+	this->stats.eatenPieces[this->stats.eatenPiecesCount-1] = piece;
+	this->stats.capturesCount++;
+	this->stats.eatenPoints += piece->getPoints();
+}
+
 Player::~Player() {
 	// TODO implement destructor to delete all pieces
 	delete[] this->pieces;

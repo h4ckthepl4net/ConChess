@@ -6,6 +6,7 @@ Piece::Piece(
 	Pieces name,
 	PieceIDs id,
 	PieceSymbols symbol,
+	int points,
 	Coords initialCoords,
 	Player& player,
 	Board& board,
@@ -15,6 +16,7 @@ Piece::Piece(
 	name(piecesToString(name)),
 	id(pieceIDsToString(id)),
 	symbol(pieceSymbolToString(symbol)),
+	points(points),
 	coords(initialCoords),
 	owner(player),
 	board(board) {
@@ -40,15 +42,15 @@ Coords Piece::getCoords() {
 	return this->coords;
 }
 
-bool Piece::isWhite() {
+bool Piece::isWhite() const {
 	return this->color == Color::WHITE;
 }
 
-bool Piece::isBlack() {
+bool Piece::isBlack() const {
 	return this->color == Color::BLACK;
 }
 
-bool Piece::isUnknown() {
+bool Piece::isUnknown() const {
 	return this->color == Color::UNKNOWN;
 }
 
@@ -73,6 +75,7 @@ bool Piece::move(Coords coords) {
 		this->board.move(this->coords, coords);
 		this->coords = coords;
 		this->isMoved = true;
+		this->cyclesStandingWithoutAMove = 0;
 		return true;
 	}
 	return false;
@@ -92,4 +95,43 @@ Board& Piece::getBoard() {
 
 bool Piece::hasMoved() {
 	return this->isMoved;
+}
+
+void Piece::incrementNoMoveCycles() {
+	this->cyclesStandingWithoutAMove++;
+}
+
+void Piece::incrementCycles() {
+	this->cyclesFromGameStart++;
+}
+
+int Piece::getNoMoveCycles() {
+	return this->cyclesStandingWithoutAMove;
+}
+
+int Piece::getCycles() {
+	return this->cyclesFromGameStart;
+}
+
+Coords Piece::getDelta(const Coords& coords) const {
+	return {
+		coords.y - this->coords.y,
+		coords.x - this->coords.x
+	};
+}
+
+Coords Piece::getColorBasedDelta(const Coords& coords) const {
+	const std::int8_t coef = this->isBlack() ? -1 : 1;
+	return {
+		coef * (coords.y - this->coords.y),
+		coords.x - this->coords.x
+	};
+}
+
+bool Piece::isSameColor(Piece* piece) const {
+	return this->color == piece->color;
+}
+
+int Piece::getPoints() {
+	return this->points;
 }

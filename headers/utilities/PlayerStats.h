@@ -11,7 +11,8 @@ struct PlayerStats {
 	int capturesCount = 0;
 	int checksCount = 0;
 	int eatenPoints = 0;
-	Piece* eatenPieces = nullptr;
+	int eatenPiecesCount = 0;
+	Piece** eatenPieces = nullptr;
 };
 
 #endif // !PLAYER_STATS_H

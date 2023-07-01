@@ -9,18 +9,24 @@ King::King(
 	Pieces::KING,
 	PieceIDs::KING,
 	PieceSymbols::KING,
+	PiecePoints::KING,
 	Fields::E1,
 	player,
 	board
 ) {
 }
 
-Coords* King::getAvailableMoves() const {
+std::pair<Coords*, unsigned int> King::getAvailableMoves() const {
 	// TODO implement
-	return nullptr;
+	return std::pair(nullptr, 0);
 }
 
 bool King::canMove(Coords coords) const {
+	// TODO implement
+	return false;
+}
+
+bool King::isMoveAlgorithmSatisfied(const Coords& coords) const {
 	// TODO implement
 	return false;
 }

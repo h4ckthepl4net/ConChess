@@ -9,18 +9,24 @@ Queen::Queen(
 	Pieces::QUEEN,
 	PieceIDs::QUEEN,
 	PieceSymbols::QUEEN,
+	PiecePoints::QUEEN,
 	Fields::D1,
 	player,
 	board
 ) {
 }
 
-Coords* Queen::getAvailableMoves() const {
+std::pair<Coords*, unsigned int> Queen::getAvailableMoves() const {
 	// TODO implement
-	return nullptr;
+	return std::pair(nullptr, 0);
 }
 
 bool Queen::canMove(Coords coords) const {
+	// TODO implement
+	return false;
+}
+
+bool Queen::isMoveAlgorithmSatisfied(const Coords& coords) const {
 	// TODO implement
 	return false;
 }

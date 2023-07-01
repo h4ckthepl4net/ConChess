@@ -10,18 +10,24 @@ Knight::Knight(
 	Pieces::KNIGHT,
 	PieceIDs::KNIGHT,
 	PieceSymbols::KNIGHT,
+	PiecePoints::KNIGHT,
 	initialCoord,
 	player,
 	board
 ) {
 }
 
-Coords* Knight::getAvailableMoves() const {
+std::pair<Coords*, unsigned int> Knight::getAvailableMoves() const {
 	// TODO implement
-	return nullptr;
+	return std::pair(nullptr, 0);
 }
 
 bool Knight::canMove(Coords coords) const {
+	// TODO implement
+	return false;
+}
+
+bool Knight::isMoveAlgorithmSatisfied(const Coords& coords) const {
 	// TODO implement
 	return false;
 }

@@ -39,7 +39,7 @@ public:
 		CONSOLE_SCREEN_BUFFER_INFOEX = {}
 	);
 	void prepare() const;
-	void drawBoard() const;
+	void drawBoard(bool = false) const;
 	void drawPlayerStats(Player*, unsigned int) const;
 	void clear() const;
 	ConsoleEvent listen() const;
