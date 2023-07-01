@@ -20,8 +20,17 @@ Rook::Rook(
 }
 
 std::pair<Coords*, unsigned int> Rook::getAvailableMoves() const {
-	// TODO implement
-	return std::pair(nullptr, 0);
+	Coords* availableMoves = new Coords[14];
+	unsigned int availableMovesCount = 0;
+	for (char i = 0; i < 8; i++) {
+		if (i != this->coords.x && this->canMove({ this->coords.y, i })) {
+			availableMoves[availableMovesCount++] = { this->coords.y, i };
+		}
+		if (i != this->coords.y && this->canMove({ i, this->coords.x })) {
+			availableMoves[availableMovesCount++] = { i, this->coords.x };
+		}
+	}
+	return std::pair(availableMoves, availableMovesCount);
 }
 
 bool Rook::canMove(Coords coords) const {
