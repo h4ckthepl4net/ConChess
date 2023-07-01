@@ -4,8 +4,10 @@
 #define QUEEN_H
 
 #include "../Piece.h"
+#include "Bishop.h"
+#include "Rook.h"
 
-class Queen : public Piece {
+class Queen : public Bishop, public Rook {
 public:
 	Queen(
 		Color color,

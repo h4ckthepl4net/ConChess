@@ -55,8 +55,5 @@ bool Rook::canMove(Coords coords) const {
 
 bool Rook::isMoveAlgorithmSatisfied(const Coords& coords) const {
 	Coords delta = this->getColorBasedDelta(coords);
-	if (delta.x == 0 && delta.y != 0 || delta.y == 0 && delta.x != 0) {
-		return true;
-	}
-	return false;
+	return delta.x == 0 && delta.y != 0 || delta.y == 0 && delta.x != 0;
 }

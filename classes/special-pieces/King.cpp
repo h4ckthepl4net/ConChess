@@ -46,9 +46,6 @@ bool King::canMove(Coords coords) const {
 
 bool King::isMoveAlgorithmSatisfied(const Coords& coords) const {
 	Coords delta = this->getDelta(coords);
-	if ((abs(delta.x) < 2 && abs(delta.y) < 2 && (delta.y || delta.x)) ||
-		(abs(delta.x) == 2 && !this->hasMoved())) {
-		return true;
-	}
-	return false;
+	return (abs(delta.x) < 2 && abs(delta.y) < 2 && (delta.y || delta.x)) ||
+			(abs(delta.x) == 2 && !this->hasMoved());
 }

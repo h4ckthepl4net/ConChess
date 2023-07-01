@@ -36,8 +36,6 @@ bool Knight::canMove(Coords coords) const {
 
 bool Knight::isMoveAlgorithmSatisfied(const Coords& coords) const {
 	Coords delta = this->getColorBasedDelta(coords);
-	if (abs(delta.y) == 2 && abs(delta.x) == 1 || abs(delta.y) == 1 && abs(delta.x) == 2) {
-		return true;
-	}
-	return false;
+	return abs(delta.y) == 2 && abs(delta.x) == 1 ||
+			abs(delta.y) == 1 && abs(delta.x) == 2;
 }
