@@ -29,8 +29,19 @@ Queen::Queen(
 	) {}
 
 std::pair<Coords*, unsigned int> Queen::getAvailableMoves() const {
-	// TODO implement
-	return std::pair(nullptr, 0);
+	std::pair<Coords*, unsigned int> bishopMoves = Bishop::getAvailableMoves();
+	std::pair<Coords*, unsigned int> rookMoves = Rook::getAvailableMoves();
+	Coords* availableMoves = new Coords[bishopMoves.second + rookMoves.second];
+	unsigned int availableMovesCount = 0;
+	for (unsigned int i = 0; i < bishopMoves.second; i++) {
+		availableMoves[availableMovesCount++] = bishopMoves.first[i];
+	}
+	for (unsigned int i = 0; i < rookMoves.second; i++) {
+		availableMoves[availableMovesCount++] = rookMoves.first[i];
+	}
+	delete bishopMoves.first;
+	delete rookMoves.first;
+	return std::pair(availableMoves, availableMovesCount);
 }
 
 bool Queen::canMove(Coords coords) const {
