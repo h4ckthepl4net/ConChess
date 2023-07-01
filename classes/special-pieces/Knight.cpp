@@ -24,11 +24,20 @@ std::pair<Coords*, unsigned int> Knight::getAvailableMoves() const {
 }
 
 bool Knight::canMove(Coords coords) const {
-	// TODO implement
+	if (this->isMoveAlgorithmSatisfied(coords)) {
+		Coords delta = this->getDelta(coords);
+		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
+		if (piece && !this->isSameColor(piece) || !piece) {
+			return true;
+		}
+	}
 	return false;
 }
 
 bool Knight::isMoveAlgorithmSatisfied(const Coords& coords) const {
-	// TODO implement
+	Coords delta = this->getColorBasedDelta(coords);
+	if (abs(delta.y) == 2 && abs(delta.x) == 1 || abs(delta.y) == 1 && abs(delta.x) == 2) {
+		return true;
+	}
 	return false;
 }
