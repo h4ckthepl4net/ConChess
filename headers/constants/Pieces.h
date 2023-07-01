@@ -12,7 +12,6 @@ enum class Pieces {
 	BISHOP,
 	KNIGHT,
 	PAWN,
-	POSSIBLE_MOVE,
 };
 
 constexpr const char* piecesToString(Pieces piece) {

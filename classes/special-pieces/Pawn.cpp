@@ -20,8 +20,49 @@ Pawn::Pawn(
 }
 
 std::pair<Coords*, unsigned int> Pawn::getAvailableMoves() const {
-	// TODO implement
-	return std::pair(nullptr, 0);
+	const Coords& coords = this->coords;
+	std::int8_t coef = this->isWhite() ? 1 : -1;
+	Coords* availableMoves = new Coords[4];
+	int availableMovesCount = 0;
+	char forwardPieceX = coords.x;
+	char forwardPieceY = coords.y + coef;
+	Piece* forwardPiece = this->board.pieceAt({ forwardPieceX, forwardPieceY });
+	if (coords.y + coef >= 0 && coords.y + coef < this->board.getHeight() && !forwardPiece) {
+		availableMoves[availableMovesCount] = { coords.y + coef, coords.x };
+		availableMovesCount++;
+	}
+	if (coords.y + coef * 2 >= 0 && coords.y + coef * 2 < this->board.getHeight() && !this->hasMoved()) {
+		char doubleForwardPieceX = coords.x;
+		char doubleForwardPieceY = coords.y + coef * 2;
+		Piece* doubleForwardPiece = this->board.pieceAt({ doubleForwardPieceX, doubleForwardPieceY });
+		if (!doubleForwardPiece && !forwardPiece) {
+			availableMoves[availableMovesCount] = { coords.y + coef * 2, coords.x };
+			availableMovesCount++;
+		}
+	}
+	if (coords.x > 0) {
+		char leftPieceX = coords.x - 1;
+		char leftForwardPieceY = coords.y + coef;
+		Piece* leftForwardPiece = this->board.pieceAt({ leftPieceX, leftForwardPieceY });
+		Pawn* leftPiece = static_cast<Pawn*>(this->board.pieceAt({ leftPieceX, coords.y }));
+		if (leftForwardPiece && !this->isSameColor(leftForwardPiece) ||
+			leftPiece && !this->isSameColor(leftPiece) && leftPiece->isOpenToEmpassant && leftPiece->getNoMoveCycles() == 1) {
+			availableMoves[availableMovesCount] = { leftForwardPieceY, leftPieceX };
+			availableMovesCount++;
+		}
+	}
+	if (coords.x < this->board.getWidth() - 1) {
+		char rightPieceX = coords.x + 1;
+		char rightForwardPieceY = coords.y + coef;
+		Piece* rightForwardPiece = this->board.pieceAt({ rightPieceX, rightForwardPieceY });
+		Pawn* rightPiece = static_cast<Pawn*>(this->board.pieceAt({ rightPieceX, coords.y }));
+		if (rightForwardPiece && !this->isSameColor(rightForwardPiece) ||
+			rightPiece && !this->isSameColor(rightPiece) && rightPiece->isOpenToEmpassant && rightPiece->getNoMoveCycles() == 1) {
+			availableMoves[availableMovesCount] = { rightForwardPieceY, rightPieceX };
+			availableMovesCount++;
+		}
+	}
+	return std::pair(availableMoves, availableMovesCount);
 }
 
 bool Pawn::move(Coords coords) {

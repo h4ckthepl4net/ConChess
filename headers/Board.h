@@ -14,6 +14,7 @@ class Board {
 	Piece* selectedPiece = nullptr;
 	unsigned short width;
 	unsigned short height;
+	std::pair<Coords*, unsigned int> markedPossibleMoves;
 
 	Console& console;
 
@@ -33,6 +34,8 @@ class Board {
 		bool isPieceSelected();
 		short getHeight();
 		short getWidth();
+		bool isPossibleMove(const Coords&) const;
+		bool isPossibleMove(const unsigned short&) const;
 
 	friend class Console;
 };

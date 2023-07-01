@@ -63,7 +63,19 @@ bool Board::click(unsigned short index) {
 	Piece* clickedPiece = this->board[index].getPiece();
 	if (clickedPiece && !this->selectedPiece) {
 		this->selectedPiece = clickedPiece;
+		this->markedPossibleMoves = this->selectedPiece->getAvailableMoves();
+		for (unsigned int i = 0; i < this->markedPossibleMoves.second; i++) {
+			Coords& coords = this->markedPossibleMoves.first[i];
+			this->board[coords.x + coords.y * this->width].isPossibleMove = true;
+		}
 	} else if (this->selectedPiece) {
+		for (unsigned int i = 0; i < this->markedPossibleMoves.second; i++) {
+			Coords& coords = this->markedPossibleMoves.first[i];
+			this->board[coords.x + coords.y * this->width].isPossibleMove = false;
+		}
+		delete[] this->markedPossibleMoves.first;
+		this->markedPossibleMoves.first = nullptr;
+		this->markedPossibleMoves.second = 0;
 		char x = index % this->width;
 		char y = index / this->width;
 		bool wasMove = this->selectedPiece->move({ y, x });
@@ -95,4 +107,18 @@ short Board::getWidth() {
 Piece* Board::removePiece(Coords coords) {
 	const unsigned short index = coords.x + coords.y * this->width;
 	return this->board[index].removePiece();
+}
+
+bool Board::isPossibleMove(const Coords& coords) const {
+	if (coords.x >= this->width || coords.y >= this->height) {
+		throw std::invalid_argument("Invalid board coords");
+	}
+	return this->isPossibleMove(coords.x + coords.y * this->width);
+}
+
+bool Board::isPossibleMove(const unsigned short& index) const {
+	if (index >= this->width * this->height) {
+		throw std::invalid_argument("Invalid board index");
+	}
+	return this->board[index].isPossibleMove;
 }

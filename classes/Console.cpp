@@ -90,7 +90,6 @@ void Console::drawBoard(bool wasMove) const {
 		for (unsigned int j = 0; j < width; j++) {
 			arrayPos = (i * width + j);
 			Piece* piece = board[arrayPos].getPiece();
-			std::string identifier = "";
 			std::string symbol = " ";
 			int color = 0;
 			if (piece) {
@@ -98,12 +97,12 @@ void Console::drawBoard(bool wasMove) const {
 					piece->incrementNoMoveCycles();
 					piece->incrementCycles();
 				}
-				identifier = piece->getId();
 				symbol = piece->getSymbol();
 				color = piece->getConsoleColor();
 			}
-			if (identifier == pieceIDsToString(PieceIDs::POSSIBLE_MOVE)) {
-				self.drawRawTile(symbol, color);
+			if (this->board.isPossibleMove(arrayPos)) {
+				const int tileColor = color | ((piece) ? BACKGROUND_RED : BACKGROUND_GREEN);
+				self.drawRawTile(symbol, tileColor);
 			} else {
 				if ((i + j) % 2 == 0) {
 					self.drawBlackTile(symbol, color);
