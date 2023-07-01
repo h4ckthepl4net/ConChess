@@ -1,4 +1,5 @@
 #include "../../headers/special-pieces/Queen.h"
+#include "../../headers/Board.h"
 
 Queen::Queen(
 	Color color,

@@ -1,4 +1,5 @@
 #include "../../headers/special-pieces/Knight.h"
+#include "../../headers/Board.h"
 
 Knight::Knight(
 	Color color,

@@ -1,4 +1,5 @@
 #include "../../headers/special-pieces/King.h"
+#include "../../headers/Board.h"
 
 King::King(
 	Color color,

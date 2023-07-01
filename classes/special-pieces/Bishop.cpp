@@ -1,4 +1,5 @@
 #include "../../headers/special-pieces/Bishop.h"
+#include "../../headers/Board.h"
 
 Bishop::Bishop(
 	Color color,
