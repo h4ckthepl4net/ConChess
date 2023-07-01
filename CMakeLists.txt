@@ -41,7 +41,7 @@ add_executable (
 	"headers/special-pieces/Knight.h"
 	"headers/special-pieces/Rook.h"
 	"headers/special-pieces/Pawn.h"
-	"headers/special-pieces/PossibleMove.h"
+	
 	
 	"classes/Game.cpp"
 	"classes/Player.cpp" 
@@ -54,7 +54,7 @@ add_executable (
 	"classes/special-pieces/Knight.cpp"
 	"classes/special-pieces/Rook.cpp"
 	"classes/special-pieces/Pawn.cpp"
-	"classes/special-pieces/PossibleMove.cpp"
+	
  "headers/utilities/PlayerStats.h" "headers/Slot.h" "classes/Slot.cpp")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)

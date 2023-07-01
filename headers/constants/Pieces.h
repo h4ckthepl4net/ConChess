@@ -23,7 +23,6 @@ constexpr const char* piecesToString(Pieces piece) {
 		case Pieces::BISHOP: return "Bishop";
 		case Pieces::KNIGHT: return "Knight";
 		case Pieces::PAWN: return "Pawn";
-		case Pieces::POSSIBLE_MOVE: return "PossibleMove";
 		default: throw std::invalid_argument("Invalid Pieces");
 	}
 }

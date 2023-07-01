@@ -4,6 +4,7 @@
 #define PIECE_H
 
 #include <string>
+
 #include "constants/Pieces.h"
 #include "constants/PieceIDs.h"
 #include "constants/PieceSymbols.h"
