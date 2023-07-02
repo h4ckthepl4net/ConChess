@@ -19,7 +19,7 @@ Pawn::Pawn(
 ) {
 }
 
-std::pair<Coords*, unsigned int> Pawn::getAvailableMoves() const {
+std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBlocks) {
 	const Coords& coords = this->coords;
 	std::int8_t coef = this->isWhite() ? 1 : -1;
 	Coords* availableMoves = new Coords[4];
@@ -43,20 +43,24 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves() const {
 		char leftPieceX = coords.x - 1;
 		char leftForwardPieceY = coords.y + coef;
 		Coords leftForwardCoords = { leftForwardPieceY, leftPieceX };
-		Coords leftCoords = { coords.y, leftPieceX };
-		if (this->canMove(leftForwardCoords) || this->canMove(leftCoords)) {
+		if (this->canMove(leftForwardCoords)) {
 			availableMoves[availableMovesCount] = leftForwardCoords;
 			availableMovesCount++;
+			this->board.addAttackedBy(leftForwardCoords, this);
+			this->addAttackedSlot(this->board.slotAt(leftForwardCoords));
+			// TODO maybe blocked needed, not sure
 		}
 	}
 	if (coords.x < this->board.getWidth() - 1) {
 		char rightPieceX = coords.x + 1;
 		char rightForwardPieceY = coords.y + coef;
 		Coords rightForwardCoords = { rightForwardPieceY, rightPieceX };
-		Coords rightPiece = { coords.y, rightPieceX };
-		if (this->canMove(rightForwardCoords) || this->canMove(rightPiece)) {
+		if (this->canMove(rightForwardCoords)) {
 			availableMoves[availableMovesCount] = rightForwardCoords;
 			availableMovesCount++;
+			this->board.addAttackedBy(rightForwardCoords, this);
+			this->addAttackedSlot(this->board.slotAt(rightForwardCoords));
+			// TODO maybe blocked needed, not sure
 		}
 	}
 	return std::pair(availableMoves, availableMovesCount);

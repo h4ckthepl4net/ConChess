@@ -28,9 +28,9 @@ Queen::Queen(
 		board
 	) {}
 
-std::pair<Coords*, unsigned int> Queen::getAvailableMoves() const {
-	std::pair<Coords*, unsigned int> bishopMoves = Bishop::getAvailableMoves();
-	std::pair<Coords*, unsigned int> rookMoves = Rook::getAvailableMoves();
+std::pair<Coords*, unsigned int> Queen::getAvailableMoves(bool updateAttacksAndBlocks) {
+	std::pair<Coords*, unsigned int> bishopMoves = Bishop::getAvailableMoves(updateAttacksAndBlocks);
+	std::pair<Coords*, unsigned int> rookMoves = Rook::getAvailableMoves(updateAttacksAndBlocks);
 	Coords* availableMoves = new Coords[bishopMoves.second + rookMoves.second];
 	unsigned int availableMovesCount = 0;
 	for (unsigned int i = 0; i < bishopMoves.second; i++) {

@@ -18,31 +18,54 @@ Knight::Knight(
 ) {
 }
 
-std::pair<Coords*, unsigned int> Knight::getAvailableMoves() const {
+std::pair<Coords*, unsigned int> Knight::getAvailableMoves(bool updateAttacksAndBlocks) {
 	Coords* availableMoves = new Coords[8];
 	unsigned int availableMovesCount = 0;
+	char boardHeight = this->board.getHeight();
+	char boardWidth = this->board.getWidth();
 	for (char i = -1; i <= 1; i+=2) {
 		for (char j = -2; j <= 2; j+=4) {
 			if (i && j && abs(i) != abs(j)) {
 				Coords coords = { this->coords.y + j, this->coords.x + i };
-				if (coords.x >= 0 && coords.y >= 0 &&
-					coords.x < this->board.getWidth() && coords.y < this->board.getHeight() &&
-					this->canMove(coords)) {
-					availableMoves[availableMovesCount++] = coords;
+				bool isInBoardArea = coords.x >= 0 && coords.y >= 0 &&
+									coords.x < boardWidth && coords.y < boardHeight;
+				bool canMove = false;
+				if (isInBoardArea) {
+					canMove = this->canMove(coords);
+					if (canMove) {
+						availableMoves[availableMovesCount++] = coords;
+					} else if (updateAttacksAndBlocks) {
+						this->board.addAttackedBy(coords, this);
+						this->addAttackedSlot(this->board.slotAt(coords));
+						/*Piece* blockingPiece = this->board.pieceAt({ coords.x, coords.y });
+						if (blockingPiece) {
+							blockingPiece->addBlockedPiece(this);
+						}*/
+					}
+				}
+				coords = { this->coords.y + i, this->coords.x + j };
+				isInBoardArea = coords.x >= 0 && coords.y >= 0 &&
+								coords.x < boardWidth && coords.y < boardHeight;
+				if (isInBoardArea) {
+					canMove = this->canMove(coords);
+					if (canMove) {
+						availableMoves[availableMovesCount++] = coords;
+					} else if (updateAttacksAndBlocks) {
+						this->board.addAttackedBy(coords, this);
+						this->addAttackedSlot(this->board.slotAt(coords));
+						/*Piece* blockingPiece = this->board.pieceAt({ coords.x, coords.y });
+						if (blockingPiece) {
+							blockingPiece->addBlockedPiece(this);
+						}*/
+					}
 				}
 			}
 		}
 	}
-	for (char i = -1; i <= 1; i += 2) {
-		for (char j = -2; j <= 2; j += 4) {
-			if (i && j && abs(i) != abs(j)) {
-				Coords coords = { this->coords.y + i, this->coords.x + j };
-				if (coords.x >= 0 && coords.y >= 0 &&
-					coords.x < this->board.getWidth() && coords.y < this->board.getHeight() &&
-					this->canMove(coords)) {
-					availableMoves[availableMovesCount++] = coords;
-				}
-			}
+	if (updateAttacksAndBlocks) {
+		for (unsigned int i = 0; i < availableMovesCount; i++) {
+			this->board.addAttackedBy(availableMoves[i], this);
+			this->addAttackedSlot(this->board.slotAt(availableMoves[i]));
 		}
 	}
 	return std::pair(availableMoves, availableMovesCount);
@@ -50,7 +73,6 @@ std::pair<Coords*, unsigned int> Knight::getAvailableMoves() const {
 
 bool Knight::canMove(Coords coords) const {
 	if (this->isMoveAlgorithmSatisfied(coords)) {
-		Coords delta = this->getDelta(coords);
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
 		if (piece && !this->isSameColor(piece) || !piece) {
 			return true;

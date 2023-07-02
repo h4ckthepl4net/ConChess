@@ -37,6 +37,12 @@ void Game::prepareBoard() {
 	const unsigned char player2PiecesCount = this->players[1].getPiecesCount();
 	this->board.placePieces(player1Pieces, player1PiecesCount);
 	this->board.placePieces(player2Pieces, player2PiecesCount);
+	for (unsigned int i = 0; i < player1PiecesCount; i++) {
+		player1Pieces[i]->getAvailableMoves(true);
+	}
+	for (unsigned int i = 0; i < player2PiecesCount; i++) {
+		player2Pieces[i]->getAvailableMoves(true);
+	}
 }
 
 void Game::start() {

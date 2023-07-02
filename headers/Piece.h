@@ -4,6 +4,7 @@
 #define PIECE_H
 
 #include <string>
+#include <limits>
 
 #include "constants/Pieces.h"
 #include "constants/PieceIDs.h"
@@ -31,6 +32,10 @@ protected:
 	int cyclesStandingWithoutAMove = 0;
 	int cyclesFromGameStart = 0;
 	int points = 0;
+	Piece** blockedSameColorPieces = nullptr;
+	unsigned int blockedPiecesCount = 0;
+	Slot** attackedSlots = nullptr;
+	unsigned int attackedSlotsCount = 0;
 public:
 	Piece(
 		Color color,
@@ -45,7 +50,7 @@ public:
 	);
 	std::string getId();
 	virtual std::string getSymbol();
-	virtual std::pair<Coords*, unsigned int> getAvailableMoves() const = 0;
+	virtual std::pair<Coords*, unsigned int> getAvailableMoves(bool = false) = 0;
 	virtual bool isMoveAlgorithmSatisfied(const Coords& coords) const = 0;
 	virtual bool canMove(Coords coords) const = 0;
 	virtual int getConsoleColor();
@@ -69,6 +74,10 @@ public:
 	bool isSameColor(Piece* piece) const;
 	int getPoints();
 	void setCoords(Coords);
+	void addAttackedSlot(Slot*);
+	void removeAttackedSlot(Slot*);
+	void addBlockedPiece(Piece*);
+	void removeBlockedPiece(Piece*);
 };
 
 #endif // !PIECE_H

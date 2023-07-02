@@ -12,7 +12,7 @@ public:
 		Player& player,
 		Board& board
 	);
-	std::pair<Coords*, unsigned int> getAvailableMoves() const override;
+	std::pair<Coords*, unsigned int> getAvailableMoves(bool = false) override;
 	bool move(Coords) override;
 	bool canMove(Coords coord) const override;
 	bool isMoveAlgorithmSatisfied(const Coords& coord) const override;

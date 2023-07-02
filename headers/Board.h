@@ -27,6 +27,9 @@ class Board {
 		Piece* move (Coords, Coords);
 		Piece* pieceAt(COORD) const;
 		Piece* pieceAt(unsigned short) const;
+		Slot* slotAt(Coords) const;
+		Slot* slotAt(COORD) const;
+		Slot* slotAt(unsigned short) const;
 		//bool isAttacked(COORD) const;
 		//bool isAttacked(unsigned short) const;
 		bool click(COORD);
@@ -36,6 +39,8 @@ class Board {
 		short getWidth();
 		bool isPossibleMove(const Coords&) const;
 		bool isPossibleMove(const unsigned short&) const;
+		void addAttackedBy(Coords coord, Piece* piece);
+		void removeAttackedBy(Coords coord, Piece* piece);
 
 	friend class Console;
 };

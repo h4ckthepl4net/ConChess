@@ -17,7 +17,7 @@ King::King(
 ) {
 }
 
-std::pair<Coords*, unsigned int> King::getAvailableMoves() const {
+std::pair<Coords*, unsigned int> King::getAvailableMoves(bool updateAttacksAndBlocks) {
 	// TODO implement
 	return std::pair(nullptr, 0);
 }
@@ -41,7 +41,7 @@ bool King::canMove(Coords coords) const {
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
 		if (piece && !this->isSameColor(piece) || !piece) {
 			/*if (this->board.isAttacked(coords)) {
-				TODO implement checked functionality also moving is not allowed if the field is attacked
+				TODO implement checked functionality also moving is not allowed if the field is attacked king cannot eat if the figure is defended by another
 			}*/
 			if (abs(delta.x) < 2 && abs(delta.y) < 2 && (delta.y || delta.x)) {
 				return true;

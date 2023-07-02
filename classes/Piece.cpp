@@ -144,3 +144,68 @@ void Piece::setCoords(Coords coords) {
 	this->cyclesStandingWithoutAMove = 0;
 	this->coords = coords;
 }
+
+
+void Piece::addAttackedSlot(Slot* slot) {
+	bool isAlreadyAttacked = false;
+	for (unsigned int i = 0; i < this->attackedSlotsCount; i++) {
+		if (this->attackedSlots[i] == slot) {
+			isAlreadyAttacked = true;
+			break;
+		}
+	}
+	if (!isAlreadyAttacked) {
+		Slot** oldPtr = this->attackedSlots;
+		this->attackedSlots = new Slot * [this->attackedSlotsCount + 1];
+		for (unsigned int i = 0; i < this->attackedSlotsCount; i++) {
+			this->attackedSlots[i] = oldPtr[i];
+		}
+		this->attackedSlots[this->attackedSlotsCount++] = slot;
+		delete[] oldPtr;
+	}
+}
+
+void Piece::removeAttackedSlot(Slot* slot) {
+	Slot** oldPtr = this->attackedSlots;
+	this->attackedSlots = new Slot * [this->attackedSlotsCount - 1];
+	unsigned int j = 0;
+	for (unsigned int i = 0; i < this->attackedSlotsCount; i++) {
+		if (oldPtr[i] != slot) {
+			this->attackedSlots[j++] = oldPtr[i];
+		}
+	}
+	this->attackedSlotsCount--;
+	delete[] oldPtr;
+}
+
+void Piece::addBlockedPiece(Piece* piece) {
+	bool isAlreadyBlocked = false;
+	for (unsigned int i = 0; i < this->blockedPiecesCount; i++) {
+		if (this->blockedSameColorPieces[i] == piece) {
+			isAlreadyBlocked = true;
+			break;
+		}
+	}
+	if (!isAlreadyBlocked) {
+		Piece** oldPtr = this->blockedSameColorPieces;
+		this->blockedSameColorPieces = new Piece * [this->blockedPiecesCount + 1];
+		for (unsigned int i = 0; i < this->blockedPiecesCount; i++) {
+			this->blockedSameColorPieces[i] = oldPtr[i];
+		}
+		this->blockedSameColorPieces[this->blockedPiecesCount++] = piece;
+		delete[] oldPtr;
+	}
+}
+
+void Piece::removeBlockedPiece(Piece* piece) {
+	Piece** oldPtr = this->blockedSameColorPieces;
+	this->blockedSameColorPieces = new Piece * [this->blockedPiecesCount - 1];
+	unsigned int j = 0;
+	for (unsigned int i = 0; i < this->blockedPiecesCount; i++) {
+		if (oldPtr[i] != piece) {
+			this->blockedSameColorPieces[j++] = oldPtr[i];
+		}
+	}
+	this->blockedPiecesCount--;
+	delete[] oldPtr;
+}

@@ -36,13 +36,22 @@ Piece* Slot::getPiece() const {
 }
 
 void Slot::addAttackedBy(Piece* piece) {
-	Piece** oldPtr = this->attackedBy;
-	this->attackedBy = new Piece * [this->attackedByCount + 1];
+	bool alreadyAttacked = false;
 	for (unsigned int i = 0; i < this->attackedByCount; i++) {
-		this->attackedBy[i] = oldPtr[i];
+		if (this->attackedBy[i] == piece) {
+			alreadyAttacked = true;
+			break;
+		}
 	}
-	this->attackedBy[this->attackedByCount++] = piece;
-	delete[] oldPtr;
+	if (!alreadyAttacked) {
+		Piece** oldPtr = this->attackedBy;
+		this->attackedBy = new Piece * [this->attackedByCount + 1];
+		for (unsigned int i = 0; i < this->attackedByCount; i++) {
+			this->attackedBy[i] = oldPtr[i];
+		}
+		this->attackedBy[this->attackedByCount++] = piece;
+		delete[] oldPtr;
+	}
 }
 
 void Slot::removeAttackedBy(Piece* piece) {

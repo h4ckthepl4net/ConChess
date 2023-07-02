@@ -53,7 +53,28 @@ Piece* Board::pieceAt(COORD coords) const {
 	if (coords.X >= this->width || coords.Y >= this->height) {
 		throw std::invalid_argument("Invalid board coords");
 	}
-	return this->board[coords.Y * this->height + coords.X].getPiece();
+	return this->board[coords.Y * this->width + coords.X].getPiece();
+}
+
+Slot* Board::slotAt(COORD coords) const {
+	if (coords.X >= this->width || coords.Y >= this->height) {
+		throw std::invalid_argument("Invalid board coords");
+	}
+	return &this->board[coords.Y * this->width + coords.X];
+}
+
+Slot* Board::slotAt(Coords coords) const {
+	if (coords.x >= this->width || coords.y >= this->height) {
+		throw std::invalid_argument("Invalid board coords");
+	}
+	return &this->board[coords.y * this->width + coords.y];
+}
+
+Slot* Board::slotAt(unsigned short index) const {
+	if (index >= this->width * this->height) {
+		throw std::invalid_argument("Invalid board index");
+	}
+	return &this->board[index];
 }
 
 bool Board::click(unsigned short index) {
@@ -121,4 +142,17 @@ bool Board::isPossibleMove(const unsigned short& index) const {
 		throw std::invalid_argument("Invalid board index");
 	}
 	return this->board[index].isPossibleMove;
+}
+
+void Board::addAttackedBy(Coords coords, Piece* piece) {
+	if (coords.x >= this->width || coords.y >= this->height) {
+		throw std::invalid_argument("Invalid board coords");
+	}
+	this->board[coords.x + this->width * coords.y].addAttackedBy(piece);
+}
+void Board::removeAttackedBy(Coords coords, Piece* piece) {
+	if (coords.x >= this->width || coords.y >= this->height) {
+		throw std::invalid_argument("Invalid board coords");
+	}
+	this->board[coords.x + this->width * coords.y].removeAttackedBy(piece);
 }

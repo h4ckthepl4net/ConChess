@@ -18,53 +18,101 @@ Bishop::Bishop(
 ) {
 }
 
-std::pair<Coords*, unsigned int> Bishop::getAvailableMoves() const {
+std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAndBlocks) {
 	Coords* availableMoves = new Coords[14];
 	unsigned int availableMovesCount = 0;
-	Coords newCoords;
 	const short boardHeight = this->board.getHeight();
 	const short boardWidth = this->board.getWidth();
 	bool upRight = true;
-	bool upLeft = true;
+	Coords upRightCoords;
 	bool downRight = true;
+	Coords downRightCoords;
+	bool upLeft = true;
+	Coords upLeftCoords;
 	bool downLeft = true;
+	Coords downLeftCoords;
 	for (char i = 1; i < 8; i++) {
-		newCoords = { this->coords.y + i, this->coords.x + i };
-		if (upRight && 
-			newCoords.x >= 0 && newCoords.x < boardWidth && 
-			newCoords.y >= 0 && newCoords.y < boardHeight && 
-			this->canMove(newCoords)) {
-			availableMoves[availableMovesCount++] = newCoords;
-		} else {
-			upRight = false;
+		if (upRight) {
+			upRightCoords = { this->coords.y + i, this->coords.x + i };
+			if (upRightCoords.x >= 0 && upRightCoords.x < boardWidth &&
+				upRightCoords.y >= 0 && upRightCoords.y < boardHeight &&
+				this->canMove(upRightCoords)) {
+				availableMoves[availableMovesCount++] = upRightCoords;
+			} else {
+				upRight = false;
+			}
 		}
-		newCoords = { this->coords.y - i, this->coords.x + i };
-		if (downRight && 
-			newCoords.x >= 0 && newCoords.x < boardWidth &&
-			newCoords.y >= 0 && newCoords.y < boardHeight && 
-			this->canMove(newCoords)) {
-			availableMoves[availableMovesCount++] = newCoords;
-		} else {
-			downRight = false;
+		if (downRight) {
+			downRightCoords = { this->coords.y - i, this->coords.x + i };
+			if (downRightCoords.x >= 0 && downRightCoords.x < boardWidth &&
+				downRightCoords.y >= 0 && downRightCoords.y < boardHeight &&
+				this->canMove(downRightCoords)) {
+				availableMoves[availableMovesCount++] = downRightCoords;
+			}
+			else {
+				downRight = false;
+			}
 		}
-		newCoords = { this->coords.y - i, this->coords.x - i };
-		if (downLeft &&
-			newCoords.x >= 0 && newCoords.x < boardWidth &&
-			newCoords.y >= 0 && newCoords.y < boardHeight &&
-			this->canMove(newCoords)) {
-			availableMoves[availableMovesCount++] = newCoords;
-		} else {
-			downLeft = false;
+		if (downLeft) {
+			downLeftCoords = { this->coords.y - i, this->coords.x - i };
+			if (downLeftCoords.x >= 0 && downLeftCoords.x < boardWidth &&
+				downLeftCoords.y >= 0 && downLeftCoords.y < boardHeight &&
+				this->canMove(downLeftCoords)) {
+				availableMoves[availableMovesCount++] = downLeftCoords;
+			}
+			else {
+				downLeft = false;
+			}
 		}
-		newCoords = { this->coords.y + i, this->coords.x - i };
-		if (upLeft &&
-			newCoords.x >= 0 && newCoords.x < boardWidth &&
-			newCoords.y >= 0 && newCoords.y < boardHeight &&
-			this->canMove(newCoords)) {
-			availableMoves[availableMovesCount++] = newCoords;
+		if (upLeft) {
+			upLeftCoords = { this->coords.y + i, this->coords.x - i };
+			if (upLeftCoords.x >= 0 && upLeftCoords.x < boardWidth &&
+				upLeftCoords.y >= 0 && upLeftCoords.y < boardHeight &&
+				this->canMove(upLeftCoords)) {
+				availableMoves[availableMovesCount++] = upLeftCoords;
+			}
+			else {
+				upLeft = false;
+			}
 		}
-		else {
-			upLeft = false;
+	}
+	if (updateAttacksAndBlocks) {
+		if (!upRight && upRightCoords.x < boardWidth && upRightCoords.y < boardHeight) {
+			Piece* upRightBlockingPiece = this->board.pieceAt({ upRightCoords.x, upRightCoords.y });
+			this->board.addAttackedBy(upRightCoords, this);
+			this->addAttackedSlot(this->board.slotAt(upRightCoords));
+			if (upRightBlockingPiece && this->isSameColor(upRightBlockingPiece)) {
+				upRightBlockingPiece->addBlockedPiece(this);
+			}
+		}
+		if (!downRight && downRightCoords.x < boardWidth && downRightCoords.y >= 0) {
+			Piece* downRightBlockingPiece = this->board.pieceAt({ downRightCoords.x, downRightCoords.y });
+			this->board.addAttackedBy(downRightCoords, this);
+			this->addAttackedSlot(this->board.slotAt(downRightCoords));
+			if (downRightBlockingPiece && this->isSameColor(downRightBlockingPiece)) {
+				downRightBlockingPiece->addBlockedPiece(this);
+			}
+		}
+		if (!upLeft && upLeftCoords.x >= 0 && upLeftCoords.y < boardHeight) {
+			Piece* upLeftBlockingPiece = this->board.pieceAt({ upLeftCoords.x, upLeftCoords.y });
+			this->board.addAttackedBy(upLeftCoords, this);
+			this->addAttackedSlot(this->board.slotAt(upLeftCoords));
+			if (upLeftBlockingPiece && this->isSameColor(upLeftBlockingPiece)) {
+				upLeftBlockingPiece->addBlockedPiece(this);
+			}
+		}
+		if (!downLeft && downLeftCoords.x >= 0 && downLeftCoords.y >= 0) {
+			Piece* downLeftBlockingPiece = this->board.pieceAt({ downLeftCoords.x, downLeftCoords.y });
+			this->board.addAttackedBy(downLeftCoords, this);
+			this->addAttackedSlot(this->board.slotAt(downLeftCoords));
+			if (downLeftBlockingPiece && this->isSameColor(downLeftBlockingPiece)) {
+				downLeftBlockingPiece->addBlockedPiece(this);
+			}
+		}
+
+		for (unsigned int i = 0; i < availableMovesCount; i++) {
+			this->board.addAttackedBy(availableMoves[i], this);
+			this->addAttackedSlot(this->board.slotAt(availableMoves[i]));
 		}
 	}
 
