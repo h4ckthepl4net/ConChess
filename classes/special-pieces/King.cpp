@@ -18,7 +18,7 @@ King::King(
 }
 
 std::pair<Coords*, unsigned int> King::getAvailableMoves(bool updateAttacksAndBlocks) {
-	Coords* availableMoves = new Coords[8];
+	Coords* availableMoves = new Coords[10];
 	unsigned int availableMovesCount = 0;
 	for (char i = -1; i < 2; i++) {
 		for (char j = -1; j < 2; j++) {
@@ -35,6 +35,20 @@ std::pair<Coords*, unsigned int> King::getAvailableMoves(bool updateAttacksAndBl
 					this->board.addAttackedBy(coords, this);
 					this->addAttackedSlot(this->board.slotAt(coords));
 				}
+			}
+		}
+	}
+	if (!this->hasMoved()) {
+		Coords castling = { this->coords.y, this->coords.x - 2 };
+		if (this->canMove(castling)) {
+			if (this->considerChecked(coords)) {
+				availableMoves[availableMovesCount++] = castling;
+			}
+		}
+		castling.x = this->coords.x + 2;
+		if (this->canMove(castling)) {
+			if (this->considerChecked(coords)) {
+				availableMoves[availableMovesCount++] = castling;
 			}
 		}
 	}
@@ -60,15 +74,17 @@ bool King::canMove(Coords coords) const {
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
 		if ((piece && !this->isSameColor(piece) || !piece) && !this->board.slotAt(coords)->willBeAttacked(this)) {
 			/*if (this->board.isAttacked(coords)) {
-				TODO implement checked functionality also moving is not allowed if the field is attacked king cannot eat if the figure is defended by another
+				TODO implement checked functionality
 			}*/
 			if (abs(delta.x) < 2 && abs(delta.y) < 2 && (delta.y || delta.x)) {
 				return true;
 			} else if (abs(delta.x) == 2 && !this->hasMoved()) {
 				char rookX = delta.x > 0 ? 7 : 0;
 				Piece* rook = this->board.pieceAt({ rookX, this->coords.y });
-				if (rook && !rook->hasMoved()) {
-					return true;
+				if (!piece && rook && !rook->hasMoved()) {
+					Coords preceeding = { this->coords.y, this->coords.x + delta.x / 2 };
+					Piece* preceedingPiece = this->board.pieceAt({ preceeding.x, preceeding.y });
+					return !preceedingPiece && !this->board.slotAt(preceeding)->willBeAttacked(this);
 				}
 			}
 		}
