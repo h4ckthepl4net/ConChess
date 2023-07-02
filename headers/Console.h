@@ -8,6 +8,7 @@
 
 #include "../headers/utilities/ConsoleEvent.h"
 #include "../headers/Player.h"
+#include "../headers/utilities/ConsoleButton.h"
 
 char letterNotation(std::uint8_t num);
 class Board;
@@ -41,8 +42,9 @@ public:
 	void prepare() const;
 	void drawBoard(bool = false) const;
 	void drawPlayerStats(Player*, unsigned int) const;
+	int drawPromptAndListen(std::string, ConsoleButton*, unsigned int) const;
 	void clear() const;
-	ConsoleEvent listen() const;
+	ConsoleEvent listen(bool = true) const;
 };
 
 

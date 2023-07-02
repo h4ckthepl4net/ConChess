@@ -156,3 +156,7 @@ void Board::removeAttackedBy(Coords coords, Piece* piece) {
 	}
 	this->board[coords.x + this->width * coords.y].removeAttackedBy(piece);
 }
+
+const Console& Board::getConsole() const {
+	return this->console;
+}

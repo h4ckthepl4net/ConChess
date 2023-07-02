@@ -19,6 +19,7 @@ public:
 	bool canMove(Coords) const override;
 	bool isMoveAlgorithmSatisfied(const Coords&) const override;
 	void incrementNoMoveCycles() override;
+	void promote();
 };
 
 #endif

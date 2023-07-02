@@ -39,6 +39,7 @@ class Board {
 		bool isPossibleMove(const unsigned short&) const;
 		void addAttackedBy(Coords coord, Piece* piece);
 		void removeAttackedBy(Coords coord, Piece* piece);
+		const Console& getConsole() const;
 
 	friend class Console;
 };

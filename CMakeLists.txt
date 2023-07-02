@@ -57,7 +57,7 @@ add_executable (
 	"classes/special-pieces/Bishop.cpp"
 	"classes/special-pieces/Knight.cpp"
 	"classes/special-pieces/Rook.cpp"
-	"classes/special-pieces/Pawn.cpp")
+	"classes/special-pieces/Pawn.cpp" "headers/utilities/ConsoleButton.h")
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ConChess PROPERTY CXX_STANDARD 20)

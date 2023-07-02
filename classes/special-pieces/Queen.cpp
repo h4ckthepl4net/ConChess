@@ -28,6 +28,34 @@ Queen::Queen(
 		board
 	) {}
 
+Queen::Queen(
+	Color color,
+	Coords initialCoords,
+	Player& player,
+	Board& board
+) : Bishop(
+	color,
+	initialCoords,
+	player,
+	board
+),
+Rook(
+	color,
+	initialCoords,
+	player,
+	board
+),
+Piece(
+	color,
+	Pieces::QUEEN,
+	PieceIDs::QUEEN,
+	PieceSymbols::QUEEN,
+	PiecePoints::QUEEN,
+	initialCoords,
+	player,
+	board
+) {}
+
 std::pair<Coords*, unsigned int> Queen::getAvailableMoves(bool updateAttacksAndBlocks) {
 	std::pair<Coords*, unsigned int> bishopMoves = Bishop::getAvailableMoves(updateAttacksAndBlocks);
 	std::pair<Coords*, unsigned int> rookMoves = Rook::getAvailableMoves(updateAttacksAndBlocks);

@@ -21,49 +21,52 @@ Pawn::Pawn(
 
 std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBlocks) {
 	const Coords& coords = this->coords;
-	std::int8_t coef = this->isWhite() ? 1 : -1;
-	Coords* availableMoves = new Coords[4];
-	int availableMovesCount = 0;
-	char forwardPieceX = coords.x;
-	char forwardPieceY = coords.y + coef;
-	Coords forwardCoords = { forwardPieceY, forwardPieceX };
-	bool canMoveForward = this->canMove(forwardCoords) && this->considerChecked(forwardCoords);
-	if (canMoveForward) {
-		availableMoves[availableMovesCount] = forwardCoords;
-		availableMovesCount++;
-	}
-	char doubleForwardPieceX = coords.x;
-	char doubleForwardPieceY = coords.y + coef * 2;
-	Coords doubleForwardCoords = { doubleForwardPieceY, doubleForwardPieceX };
-	if (this->canMove(doubleForwardCoords) && this->considerChecked(doubleForwardCoords) && canMoveForward) {
-		availableMoves[availableMovesCount] = doubleForwardCoords;
-		availableMovesCount++;
-	}
-	if (coords.x > 0) {
-		char leftPieceX = coords.x - 1;
-		char leftForwardPieceY = coords.y + coef;
-		Coords leftForwardCoords = { leftForwardPieceY, leftPieceX };
-		if (this->canMove(leftForwardCoords) && this->considerChecked(leftForwardCoords)) {
-			availableMoves[availableMovesCount] = leftForwardCoords;
+	if (coords.y > 0 && coords.y < this->board.getHeight() - 1) {
+		std::int8_t coef = this->isWhite() ? 1 : -1;
+		Coords* availableMoves = new Coords[4];
+		int availableMovesCount = 0;
+		char forwardPieceX = coords.x;
+		char forwardPieceY = coords.y + coef;
+		Coords forwardCoords = { forwardPieceY, forwardPieceX };
+		bool canMoveForward = this->canMove(forwardCoords) && this->considerChecked(forwardCoords);
+		if (canMoveForward) {
+			availableMoves[availableMovesCount] = forwardCoords;
 			availableMovesCount++;
 		}
-		// TODO maybe blocked needed, not sure
-		this->board.addAttackedBy(leftForwardCoords, this);
-		this->addAttackedSlot(this->board.slotAt(leftForwardCoords));
-	}
-	if (coords.x < this->board.getWidth() - 1) {
-		char rightPieceX = coords.x + 1;
-		char rightForwardPieceY = coords.y + coef;
-		Coords rightForwardCoords = { rightForwardPieceY, rightPieceX };
-		if (this->canMove(rightForwardCoords) && this->considerChecked(rightForwardCoords)) {
-			availableMoves[availableMovesCount] = rightForwardCoords;
+		char doubleForwardPieceX = coords.x;
+		char doubleForwardPieceY = coords.y + coef * 2;
+		Coords doubleForwardCoords = { doubleForwardPieceY, doubleForwardPieceX };
+		if (this->canMove(doubleForwardCoords) && this->considerChecked(doubleForwardCoords) && canMoveForward) {
+			availableMoves[availableMovesCount] = doubleForwardCoords;
 			availableMovesCount++;
 		}
-		// TODO maybe blocked needed, not sure
-		this->board.addAttackedBy(rightForwardCoords, this);
-		this->addAttackedSlot(this->board.slotAt(rightForwardCoords));
+		if (coords.x > 0) {
+			char leftPieceX = coords.x - 1;
+			char leftForwardPieceY = coords.y + coef;
+			Coords leftForwardCoords = { leftForwardPieceY, leftPieceX };
+			if (this->canMove(leftForwardCoords) && this->considerChecked(leftForwardCoords)) {
+				availableMoves[availableMovesCount] = leftForwardCoords;
+				availableMovesCount++;
+			}
+			// TODO maybe blocked needed, not sure
+			this->board.addAttackedBy(leftForwardCoords, this);
+			this->addAttackedSlot(this->board.slotAt(leftForwardCoords));
+		}
+		if (coords.x < this->board.getWidth() - 1) {
+			char rightPieceX = coords.x + 1;
+			char rightForwardPieceY = coords.y + coef;
+			Coords rightForwardCoords = { rightForwardPieceY, rightPieceX };
+			if (this->canMove(rightForwardCoords) && this->considerChecked(rightForwardCoords)) {
+				availableMoves[availableMovesCount] = rightForwardCoords;
+				availableMovesCount++;
+			}
+			// TODO maybe blocked needed, not sure
+			this->board.addAttackedBy(rightForwardCoords, this);
+			this->addAttackedSlot(this->board.slotAt(rightForwardCoords));
+		}
+		return std::pair(availableMoves, availableMovesCount);
 	}
-	return std::pair(availableMoves, availableMovesCount);
+	return std::pair(nullptr, 0);
 }
 
 bool Pawn::move(Coords coords) {
@@ -80,6 +83,10 @@ bool Pawn::move(Coords coords) {
 	if (besideCell && !this->isSameColor(besideCell) && abs(delta.x) == 1 && abs(delta.y) == 1 && !targetCell && result) {
 		Piece* eatenPiece = this->board.removePiece(besideCell->getCoords());
 		this->owner.addEatenPiece(eatenPiece);
+	}
+
+	if (this->coords.y == 0 || this->coords.y == this->board.getHeight() - 1) {
+		this->promote();
 	}
 	
 	return result;
@@ -127,4 +134,23 @@ void Pawn::incrementNoMoveCycles() {
 	if (this->getNoMoveCycles() > 1) {
 		this->isOpenToEmpassant = false;
 	}
+}
+
+void Pawn::promote() {
+	ConsoleButton buttons[] = { { 0, "Queen" }, { 1, "Rook" }, { 2, "Bishop" }, { 3, "Knight" } };
+	Piece** pieces = new Piece*[4];
+	pieces[0] = new Queen(this->color, this->coords, this->owner, this->board);
+	pieces[1] = new Rook(this->color, this->coords, this->owner, this->board);
+	pieces[2] = new Bishop(this->color, this->coords, this->owner, this->board);
+	pieces[3] = new Knight(this->color, this->coords, this->owner, this->board);
+	int selectedButtonId = this->board.getConsole().drawPromptAndListen("Promote pawn", buttons, 4);
+	Piece* newPiece = pieces[selectedButtonId];
+	this->board.removePiece(this->coords); // TODO remove piece from memory
+	this->board.placePieces(&newPiece, 1);
+	for (unsigned int i = 0; i < 4; i++) {
+		if (i != selectedButtonId) {
+			delete pieces[i];
+		}
+	}
+	delete[] pieces;
 }

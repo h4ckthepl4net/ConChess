@@ -142,7 +142,7 @@ void Console::drawPlayerStats(Player* players, unsigned int count) const {
 	}
 }
 
-ConsoleEvent Console::listen() const {
+ConsoleEvent Console::listen(bool getProcessedPos) const {
 	DWORD numberOfReadRecords;
 	INPUT_RECORD mouseInput;
 
@@ -156,21 +156,50 @@ ConsoleEvent Console::listen() const {
 				MOUSE_EVENT_RECORD mouseEvent = mouseInput.Event.MouseEvent;
 				COORD position = mouseEvent.dwMousePosition;
 				if (mouseEvent.dwButtonState == FROM_LEFT_1ST_BUTTON_PRESSED && !(mouseEvent.dwEventFlags & MOUSE_MOVED)) {
-					short boardX, boardY;
-					boardX = static_cast<short>(floor(static_cast<float>(position.X - this->actualBoardOffset.X) / 2));
-					boardY = this->board.height - 1 - (position.Y - this->actualBoardOffset.Y);
-					if (boardX < this->board.width && boardY < this->board.height &&
-						boardX >= 0 && boardY >= 0) {
+					if (getProcessedPos) {
+						short boardX, boardY;
+						boardX = static_cast<short>(floor(static_cast<float>(position.X - this->actualBoardOffset.X) / 2));
+						boardY = this->board.height - 1 - (position.Y - this->actualBoardOffset.Y);
+						if (boardX < this->board.width && boardY < this->board.height &&
+							boardX >= 0 && boardY >= 0) {
+							ConsoleEventDataUnion data;
+							data.clickEventData.boardArrayIndex = boardY * this->board.width + boardX;
+							data.clickEventData.boardPosition.X = boardX;
+							data.clickEventData.boardPosition.Y = boardY;
+							return ConsoleEvent(ConsoleEventType::CLICK, data);
+						}
+					}
+					else {
 						ConsoleEventDataUnion data;
-						data.clickEventData.boardArrayIndex = boardY * this->board.width + boardX;
-						data.clickEventData.boardPosition.X = boardX;
-						data.clickEventData.boardPosition.Y = boardY;
+						data.clickEventData.boardPosition.X = position.X;
+						data.clickEventData.boardPosition.Y = position.Y;
 						return ConsoleEvent(ConsoleEventType::CLICK, data);
 					}
 				}
 				break;
 			case WINDOW_BUFFER_SIZE_EVENT:// TODO Handle resize here
 				break;
+		}
+	}
+}
+
+int Console::drawPromptAndListen(std::string prompt, ConsoleButton* buttonArray, unsigned int buttonCount) const {
+	this->clear();
+	SetConsoleTextAttribute(this->hOutConsole, BACKGROUND_RED | BACKGROUND_GREEN | BACKGROUND_BLUE);
+	const Console& self = *this;
+	std::cout << prompt << std::endl;
+	for (unsigned int i = 0; i < buttonCount; i++) {
+		std::cout << " " << i + 1 << " - " << buttonArray[i].caption << std::endl;
+	}
+	std::cout << std::endl;
+	while (true) {
+		ConsoleEvent event = self.listen(false);
+		if (event.type == ConsoleEventType::CLICK) {
+			for (unsigned int i = 0; i < buttonCount; i++) {
+				if (event.data.clickEventData.boardPosition.Y == i + 1) {
+					return buttonArray[i].id;
+				}
+			}
 		}
 	}
 }
