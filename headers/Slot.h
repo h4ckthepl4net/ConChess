@@ -8,6 +8,7 @@
 class Slot {
 	Piece* piece = nullptr;
 	Piece** attackedBy = nullptr;
+	unsigned int attackedByCount = 0;
 	Coords coords;
 
 	public:
@@ -20,6 +21,8 @@ class Slot {
 		void setCoords(const Coords&);
 		Piece* removePiece();
 		bool isEmpty() const;
+		void addAttackedBy(Piece*);
+		void removeAttackedBy(Piece*);
 };
 
 

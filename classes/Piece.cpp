@@ -138,3 +138,9 @@ bool Piece::isSameColor(Piece* piece) const {
 int Piece::getPoints() {
 	return this->points;
 }
+
+void Piece::setCoords(Coords coords) {
+	this->isMoved = true;
+	this->cyclesStandingWithoutAMove = 0;
+	this->coords = coords;
+}

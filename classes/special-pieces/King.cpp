@@ -22,13 +22,26 @@ std::pair<Coords*, unsigned int> King::getAvailableMoves() const {
 	return std::pair(nullptr, 0);
 }
 
+bool King::move(Coords coords) {
+	Coords delta = this->getDelta(coords);
+	bool result = Piece::move(coords);
+	if (abs(delta.x) == 2 && result) {
+		char rookX = delta.x > 0 ? 7 : 0;
+		Piece* rook = this->board.removePiece({ this->coords.y, rookX });
+		char newRoolX = delta.x > 0 ? 5 : 3;
+		rook->setCoords({ this->coords.y, newRoolX });
+		this->board.placePieces(&rook, 1);
+	};
+	return result;
+}
+
 bool King::canMove(Coords coords) const {
 	if (this->isMoveAlgorithmSatisfied(coords)) {
 		Coords delta = this->getDelta(coords);
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
 		if (piece && !this->isSameColor(piece) || !piece) {
 			/*if (this->board.isAttacked(coords)) {
-				TODO implement checked functionality also castling is not allowed if any of the fields between king and rook is attacked
+				TODO implement checked functionality also moving is not allowed if the field is attacked
 			}*/
 			if (abs(delta.x) < 2 && abs(delta.y) < 2 && (delta.y || delta.x)) {
 				return true;

@@ -92,8 +92,8 @@ bool Pawn::canMove(Coords coords) const {
 			char besidePieceX = this->coords.x + delta.x;
 			char besidePieceY = this->coords.y;
 			Piece* pieceBeside = this->board.pieceAt({ besidePieceX, besidePieceY });
-			if (pieceBeside && 
-				pieceBeside->getId() == pieceIDsToString(PieceIDs::PAWN)) {
+			Pawn* pawnBeside = pieceBeside ? dynamic_cast<Pawn*>(pieceBeside) : nullptr;
+			if (pieceBeside && pawnBeside) {
 				Pawn* pawnBeside = static_cast<Pawn*>(pieceBeside);
 				return pawnBeside->isOpenToEmpassant && pawnBeside->getNoMoveCycles() == 1;
 			}

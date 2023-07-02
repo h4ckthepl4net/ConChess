@@ -68,6 +68,7 @@ public:
 	int getNoMoveCycles();
 	bool isSameColor(Piece* piece) const;
 	int getPoints();
+	void setCoords(Coords);
 };
 
 #endif // !PIECE_H
