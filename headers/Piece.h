@@ -59,6 +59,7 @@ public:
 	virtual bool move(Coords coords);
 	virtual void incrementCycles();
 	virtual void incrementNoMoveCycles();
+	virtual bool considerChecked(const Coords&) const;
 	Coords addDelta(Coords);
 	bool isWhite() const;
 	bool isBlack() const;

@@ -12,7 +12,7 @@ Color Player::getColor() {
 	return this->color;
 }
 
-Piece* Player::getKing() {
+Piece* Player::getKing() const {
 	return this->king;
 }
 

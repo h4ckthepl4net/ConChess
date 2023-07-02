@@ -32,7 +32,7 @@ public:
 	Player(std::string = "");
 	std::string getName();
 	Color getColor();
-	Piece* getKing();
+	Piece* getKing() const;
 	Piece** getPieces();
 	unsigned char getPiecesCount();
 	void setBoard(Board*);

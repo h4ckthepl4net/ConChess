@@ -27,7 +27,7 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 	char forwardPieceX = coords.x;
 	char forwardPieceY = coords.y + coef;
 	Coords forwardCoords = { forwardPieceY, forwardPieceX };
-	bool canMoveForward = this->canMove(forwardCoords);
+	bool canMoveForward = this->canMove(forwardCoords) && this->considerChecked(forwardCoords);
 	if (canMoveForward) {
 		availableMoves[availableMovesCount] = forwardCoords;
 		availableMovesCount++;
@@ -35,7 +35,7 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 	char doubleForwardPieceX = coords.x;
 	char doubleForwardPieceY = coords.y + coef * 2;
 	Coords doubleForwardCoords = { doubleForwardPieceY, doubleForwardPieceX };
-	if (this->canMove(doubleForwardCoords) && canMoveForward) {
+	if (this->canMove(doubleForwardCoords) && this->considerChecked(doubleForwardCoords) && canMoveForward) {
 		availableMoves[availableMovesCount] = doubleForwardCoords;
 		availableMovesCount++;
 	}
@@ -43,7 +43,7 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 		char leftPieceX = coords.x - 1;
 		char leftForwardPieceY = coords.y + coef;
 		Coords leftForwardCoords = { leftForwardPieceY, leftPieceX };
-		if (this->canMove(leftForwardCoords)) {
+		if (this->canMove(leftForwardCoords) && this->considerChecked(leftForwardCoords)) {
 			availableMoves[availableMovesCount] = leftForwardCoords;
 			availableMovesCount++;
 		}
@@ -55,7 +55,7 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 		char rightPieceX = coords.x + 1;
 		char rightForwardPieceY = coords.y + coef;
 		Coords rightForwardCoords = { rightForwardPieceY, rightPieceX };
-		if (this->canMove(rightForwardCoords)) {
+		if (this->canMove(rightForwardCoords) && this->considerChecked(rightForwardCoords)) {
 			availableMoves[availableMovesCount] = rightForwardCoords;
 			availableMovesCount++;
 		}

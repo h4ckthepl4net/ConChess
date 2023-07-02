@@ -67,3 +67,38 @@ void Slot::removeAttackedBy(Piece* piece) {
 	delete[] oldPtr;
 }
 
+bool Slot::isInnerPieceAttacked() const {
+	for (unsigned int i = 0; i < this->attackedByCount; i++) {
+		if (!this->attackedBy[i]->isSameColor(this->getPiece())) {
+			return true;
+		}
+	}
+	return false;
+}
+
+Coords Slot::getDelta(const Coords& coords) const {
+	return {
+		coords.y - this->coords.y,
+		coords.x - this->coords.x
+	};
+}
+
+bool Slot::moveWillCoverAllAttacks(const Coords& coords) const {
+	for (unsigned int i = 0; i < this->attackedByCount; i++) {
+		if (!this->attackedBy[i]->isSameColor(this->getPiece())) {
+			Coords moveDelta = this->getDelta(coords);
+			Coords attackerCoords = this->attackedBy[i]->getCoords();
+			Coords attackerDelta = this->getDelta(attackerCoords);
+			if ((coords.x != attackerCoords.x || coords.y != attackerCoords.y) &&
+				(moveDelta.x * attackerDelta.x < 0 || moveDelta.y * attackerDelta.y < 0 ||
+				abs(moveDelta.x) > abs(attackerDelta.x) || abs(moveDelta.y) > abs(attackerDelta.y) ||
+				attackerDelta.x != 0 && moveDelta.x == 0 || attackerDelta.y != 0 && moveDelta.y == 0 ||
+				abs(moveDelta.x) == abs(moveDelta.y) && abs(attackerDelta.x) != abs(attackerDelta.y) ||
+				abs(attackerDelta.x) == abs(attackerDelta.y) && abs(moveDelta.x) != abs(moveDelta.y))) {
+				return false;
+			}
+		}
+	}
+	return true;
+}
+

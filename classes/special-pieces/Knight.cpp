@@ -33,7 +33,9 @@ std::pair<Coords*, unsigned int> Knight::getAvailableMoves(bool updateAttacksAnd
 				if (isInBoardArea) {
 					canMove = this->canMove(coords);
 					if (canMove) {
-						availableMoves[availableMovesCount++] = coords;
+						if (this->considerChecked(coords)) {
+							availableMoves[availableMovesCount++] = coords;
+						}
 					} else if (updateAttacksAndBlocks) {
 						this->board.addAttackedBy(coords, this);
 						this->addAttackedSlot(this->board.slotAt(coords));
@@ -49,7 +51,9 @@ std::pair<Coords*, unsigned int> Knight::getAvailableMoves(bool updateAttacksAnd
 				if (isInBoardArea) {
 					canMove = this->canMove(coords);
 					if (canMove) {
-						availableMoves[availableMovesCount++] = coords;
+						if (this->considerChecked(coords)) {
+							availableMoves[availableMovesCount++] = coords;
+						}
 					} else if (updateAttacksAndBlocks) {
 						this->board.addAttackedBy(coords, this);
 						this->addAttackedSlot(this->board.slotAt(coords));

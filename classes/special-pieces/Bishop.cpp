@@ -37,7 +37,9 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 			if (upRightCoords.x >= 0 && upRightCoords.x < boardWidth &&
 				upRightCoords.y >= 0 && upRightCoords.y < boardHeight &&
 				this->canMove(upRightCoords)) {
-				availableMoves[availableMovesCount++] = upRightCoords;
+				if (this->considerChecked(upRightCoords)) {
+					availableMoves[availableMovesCount++] = upRightCoords;
+				}
 			} else {
 				upRight = false;
 			}
@@ -47,7 +49,9 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 			if (downRightCoords.x >= 0 && downRightCoords.x < boardWidth &&
 				downRightCoords.y >= 0 && downRightCoords.y < boardHeight &&
 				this->canMove(downRightCoords)) {
-				availableMoves[availableMovesCount++] = downRightCoords;
+				if (this->considerChecked(downRightCoords)) {
+					availableMoves[availableMovesCount++] = downRightCoords;
+				}
 			}
 			else {
 				downRight = false;
@@ -58,7 +62,9 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 			if (downLeftCoords.x >= 0 && downLeftCoords.x < boardWidth &&
 				downLeftCoords.y >= 0 && downLeftCoords.y < boardHeight &&
 				this->canMove(downLeftCoords)) {
-				availableMoves[availableMovesCount++] = downLeftCoords;
+				if (this->considerChecked(downLeftCoords)) {
+					availableMoves[availableMovesCount++] = downLeftCoords;
+				}
 			}
 			else {
 				downLeft = false;
@@ -69,7 +75,9 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 			if (upLeftCoords.x >= 0 && upLeftCoords.x < boardWidth &&
 				upLeftCoords.y >= 0 && upLeftCoords.y < boardHeight &&
 				this->canMove(upLeftCoords)) {
-				availableMoves[availableMovesCount++] = upLeftCoords;
+				if (this->considerChecked(upLeftCoords)) {
+					availableMoves[availableMovesCount++] = upLeftCoords;
+				}
 			}
 			else {
 				upLeft = false;

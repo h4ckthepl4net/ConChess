@@ -28,26 +28,48 @@ std::pair<Coords*, unsigned int> Rook::getAvailableMoves(bool updateAttacksAndBl
 	char blockedFromTop = static_cast<char>(this->board.getHeight());
 	for (char i = 0; i < 8; i++) {
 		if (i != this->coords.x && blockedFromRight == this->board.getWidth()) {
-			if (this->canMove({ this->coords.y, i })) {
-				availableMoves[availableMovesCount++] = { this->coords.y, i };
+			Coords coords = { this->coords.y, i };
+			if (this->canMove(coords)) {
+				if (this->considerChecked(coords)) {
+					availableMoves[availableMovesCount++] = { this->coords.y, i };
+				}
 			} else if (updateAttacksAndBlocks) {
 				if (i < this->coords.x) {
-					blockedFromLeft = i;
+					coords.x++;
+					Piece* nextPiece = this->board.pieceAt({ coords.x, coords.y });
+					if (nextPiece != this) {
+						blockedFromLeft = nextPiece ? i + 1 : i;
+					}
 				}
 				else if (blockedFromRight > i) {
-					blockedFromRight = i;
+					coords.x--;
+					Piece* lastPiece = this->board.pieceAt({ coords.x, coords.y });
+					if (lastPiece != this) {
+						blockedFromRight = lastPiece ? i - 1 : i;
+					}
 				}
 			}
 		}
 		if (i != this->coords.y && blockedFromTop == this->board.getHeight()) {
-			if (this->canMove({ i, this->coords.x })) {
-				availableMoves[availableMovesCount++] = { i, this->coords.x };
+			Coords coords = { i, this->coords.x };
+			if (this->canMove(coords)) {
+				if (this->considerChecked(coords)) {
+					availableMoves[availableMovesCount++] = { i, this->coords.x };
+				}
 			} else if (updateAttacksAndBlocks) {
 				if (i < this->coords.y) {
-					blockedFromBottom = i;
+					coords.y++;
+					Piece* nextPiece = this->board.pieceAt({ coords.x, coords.y });
+					if (nextPiece != this) {
+						blockedFromBottom = nextPiece ? i + 1 : i;
+					}
 				}
 				else if (blockedFromTop > i) {
-					blockedFromTop = i;
+					coords.y--;
+					Piece* lastPiece = this->board.pieceAt({ coords.x, coords.y });
+					if (lastPiece != this) {
+						blockedFromTop = lastPiece ? i - 1 : i;
+					}
 				}
 			}
 		}

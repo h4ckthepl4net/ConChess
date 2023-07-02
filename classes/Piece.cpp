@@ -71,7 +71,7 @@ Coords Piece::addDelta(Coords delta) {
 }
 
 bool Piece::move(Coords coords) {
-	if (this->canMove(coords)) {
+	if (this->canMove(coords) && this->considerChecked(coords)) {
 		Piece* eatenPiece = this->board.move(this->coords, coords);
 		this->coords = coords;
 		this->isMoved = true;
@@ -79,6 +79,13 @@ bool Piece::move(Coords coords) {
 		if (eatenPiece) {
 			this->owner.addEatenPiece(eatenPiece);
 		}
+		for (unsigned int i = 0; i < this->attackedSlotsCount; i++) {
+			this->removeAttackedSlot(this->attackedSlots[i]);
+		}
+		for (unsigned int i = 0; i < this->blockedPiecesCount; i++) {
+			this->removeBlockedPiece(this->blockedSameColorPieces[i]);
+		}
+		this->getAvailableMoves(true);
 		return true;
 	}
 	return false;
@@ -176,6 +183,7 @@ void Piece::removeAttackedSlot(Slot* slot) {
 	}
 	this->attackedSlotsCount--;
 	delete[] oldPtr;
+	slot->removeAttackedBy(this);
 }
 
 void Piece::addBlockedPiece(Piece* piece) {
@@ -208,4 +216,12 @@ void Piece::removeBlockedPiece(Piece* piece) {
 	}
 	this->blockedPiecesCount--;
 	delete[] oldPtr;
+	piece->getAvailableMoves(true);
+}
+
+bool Piece::considerChecked(const Coords& coords) const {
+	King* king = static_cast<King*>(this->owner.getKing());
+	Coords kingCoords = king->getCoords();
+	Slot* kingSlot = this->board.slotAt(kingCoords);
+	return !kingSlot->isInnerPieceAttacked() || kingSlot->moveWillCoverAllAttacks(coords);
 }
