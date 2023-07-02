@@ -67,7 +67,7 @@ Slot* Board::slotAt(Coords coords) const {
 	if (coords.x >= this->width || coords.y >= this->height) {
 		throw std::invalid_argument("Invalid board coords");
 	}
-	return &this->board[coords.y * this->width + coords.y];
+	return &this->board[coords.y * this->width + coords.x];
 }
 
 Slot* Board::slotAt(unsigned short index) const {
