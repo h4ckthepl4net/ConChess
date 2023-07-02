@@ -21,8 +21,8 @@ Knight::Knight(
 std::pair<Coords*, unsigned int> Knight::getAvailableMoves(bool updateAttacksAndBlocks) {
 	Coords* availableMoves = new Coords[8];
 	unsigned int availableMovesCount = 0;
-	char boardHeight = this->board.getHeight();
-	char boardWidth = this->board.getWidth();
+	char boardHeight = static_cast<char>(this->board.getHeight());
+	char boardWidth = static_cast<char>(this->board.getWidth());
 	for (char i = -1; i <= 1; i+=2) {
 		for (char j = -2; j <= 2; j+=4) {
 			if (i && j && abs(i) != abs(j)) {

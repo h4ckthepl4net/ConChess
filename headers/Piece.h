@@ -18,6 +18,7 @@
 
 class Player;
 class Board;
+class Slot;
 
 class Piece {
 protected:
