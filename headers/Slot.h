@@ -23,7 +23,8 @@ class Slot {
 		bool isEmpty() const;
 		void addAttackedBy(Piece*);
 		void removeAttackedBy(Piece*);
-		bool isInnerPieceAttacked() const;
+		bool isAttacked() const;
+		bool willBeAttacked(const Piece*) const;
 		bool moveWillCoverAllAttacks(const Coords&) const;
 		Coords getDelta(const Coords&) const;
 };

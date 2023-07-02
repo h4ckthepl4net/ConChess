@@ -41,7 +41,18 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 					availableMoves[availableMovesCount++] = upRightCoords;
 				}
 			} else {
-				upRight = false;
+				char previousInd = i - 1;
+				char previousY = this->coords.y + previousInd;
+				char previousX = this->coords.x + previousInd;
+				if (previousX >= 0 && previousX < boardWidth &&
+					previousY >= 0 && previousY < boardHeight) {
+					Piece* previous = this->board.pieceAt({ previousY, previousX });
+					if (previous && previous != this) {
+						upRightCoords.x = previousX;
+						upRightCoords.y = previousY;
+						upRight = false;
+					}
+				}
 			}
 		}
 		if (downRight) {
@@ -54,7 +65,18 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 				}
 			}
 			else {
-				downRight = false;
+				char previousInd = i - 1;
+				char previousY = this->coords.y - previousInd;
+				char previousX = this->coords.x + previousInd;
+				if (previousX >= 0 && previousX < boardWidth &&
+					previousY >= 0 && previousY < boardHeight) {
+					Piece* previous = this->board.pieceAt({ previousY, previousX });
+					if (previous && previous != this) {
+						downRightCoords.x = previousX;
+						downRightCoords.y = previousY;
+						downRight = false;
+					}
+				}
 			}
 		}
 		if (downLeft) {
@@ -67,7 +89,18 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 				}
 			}
 			else {
-				downLeft = false;
+				char previousInd = i - 1;
+				char previousY = this->coords.y - previousInd;
+				char previousX = this->coords.x - previousInd;
+				if (previousX >= 0 && previousX < boardWidth &&
+					previousY >= 0 && previousY < boardHeight) {
+					Piece* previous = this->board.pieceAt({ previousY, previousX });
+					if (previous && previous != this) {
+						downLeftCoords.x = previousX;
+						downLeftCoords.y = previousY;
+						downLeft = false;
+					}
+				}
 			}
 		}
 		if (upLeft) {
@@ -80,7 +113,18 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 				}
 			}
 			else {
-				upLeft = false;
+				char previousInd = i - 1;
+				char previousY = this->coords.y + previousInd;
+				char previousX = this->coords.x - previousInd;
+				if (previousX >= 0 && previousX < boardWidth &&
+					previousY >= 0 && previousY < boardHeight) {
+					Piece* previous = this->board.pieceAt({ previousY, previousX });
+					if (previous && previous != this) {
+						upLeftCoords.x = previousX;
+						upLeftCoords.y = previousY;
+						upLeft = false;
+					}
+				}
 			}
 		}
 	}

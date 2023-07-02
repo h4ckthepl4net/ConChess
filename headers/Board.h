@@ -30,8 +30,6 @@ class Board {
 		Slot* slotAt(Coords) const;
 		Slot* slotAt(COORD) const;
 		Slot* slotAt(unsigned short) const;
-		//bool isAttacked(COORD) const;
-		//bool isAttacked(unsigned short) const;
 		bool click(COORD);
 		bool click(unsigned short);
 		bool isPieceSelected();

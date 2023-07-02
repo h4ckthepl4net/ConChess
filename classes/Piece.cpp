@@ -138,7 +138,7 @@ Coords Piece::getColorBasedDelta(const Coords& coords) const {
 	};
 }
 
-bool Piece::isSameColor(Piece* piece) const {
+bool Piece::isSameColor(const Piece* piece) const {
 	return this->color == piece->color;
 }
 
@@ -223,5 +223,5 @@ bool Piece::considerChecked(const Coords& coords) const {
 	King* king = static_cast<King*>(this->owner.getKing());
 	Coords kingCoords = king->getCoords();
 	Slot* kingSlot = this->board.slotAt(kingCoords);
-	return !kingSlot->isInnerPieceAttacked() || kingSlot->moveWillCoverAllAttacks(coords);
+	return !kingSlot->isAttacked() || kingSlot->moveWillCoverAllAttacks(coords);
 }

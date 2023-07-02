@@ -73,7 +73,7 @@ public:
 	bool hasMoved() const;
 	int getCycles();
 	int getNoMoveCycles();
-	bool isSameColor(Piece* piece) const;
+	bool isSameColor(const Piece* piece) const;
 	int getPoints();
 	void setCoords(Coords);
 	void addAttackedSlot(Slot*);

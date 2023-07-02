@@ -67,9 +67,18 @@ void Slot::removeAttackedBy(Piece* piece) {
 	delete[] oldPtr;
 }
 
-bool Slot::isInnerPieceAttacked() const {
+bool Slot::isAttacked() const {
 	for (unsigned int i = 0; i < this->attackedByCount; i++) {
 		if (!this->attackedBy[i]->isSameColor(this->getPiece())) {
+			return true;
+		}
+	}
+	return false;
+}
+
+bool Slot::willBeAttacked(const Piece* piece) const {
+	for (unsigned int i = 0; i < this->attackedByCount; i++) {
+		if (!this->attackedBy[i]->isSameColor(piece)) {
 			return true;
 		}
 	}

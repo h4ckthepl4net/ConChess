@@ -18,8 +18,27 @@ King::King(
 }
 
 std::pair<Coords*, unsigned int> King::getAvailableMoves(bool updateAttacksAndBlocks) {
-	// TODO implement
-	return std::pair(nullptr, 0);
+	Coords* availableMoves = new Coords[8];
+	unsigned int availableMovesCount = 0;
+	for (char i = -1; i < 2; i++) {
+		for (char j = -1; j < 2; j++) {
+			Coords coords = { this->coords.y + i, this->coords.x + j };
+			bool isInBoardArea = coords.x >= 0 && coords.y >= 0 &&
+								coords.x < this->board.getWidth() && coords.y < this->board.getHeight();
+			if (isInBoardArea) {
+				if (this->canMove(coords)) {
+					if (this->considerChecked(coords)) {
+						availableMoves[availableMovesCount++] = coords;
+					}
+				}
+				else if (updateAttacksAndBlocks) {
+					this->board.addAttackedBy(coords, this);
+					this->addAttackedSlot(this->board.slotAt(coords));
+				}
+			}
+		}
+	}
+	return std::pair(availableMoves, availableMovesCount);
 }
 
 bool King::move(Coords coords) {
@@ -39,7 +58,7 @@ bool King::canMove(Coords coords) const {
 	if (this->isMoveAlgorithmSatisfied(coords)) {
 		Coords delta = this->getDelta(coords);
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
-		if (piece && !this->isSameColor(piece) || !piece) {
+		if ((piece && !this->isSameColor(piece) || !piece) && !this->board.slotAt(coords)->willBeAttacked(this)) {
 			/*if (this->board.isAttacked(coords)) {
 				TODO implement checked functionality also moving is not allowed if the field is attacked king cannot eat if the figure is defended by another
 			}*/
