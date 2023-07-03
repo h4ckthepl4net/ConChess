@@ -27,6 +27,7 @@ class Slot {
 		bool willBeAttacked(const Piece*) const;
 		bool moveWillCoverAllAttacks(const Coords&) const;
 		Coords getDelta(const Coords&) const;
+		void recalculateAttacks();
 };
 
 

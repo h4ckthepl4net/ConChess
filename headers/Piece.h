@@ -80,6 +80,9 @@ public:
 	void removeAttackedSlot(Slot*);
 	void addBlockedPiece(Piece*);
 	void removeBlockedPiece(Piece*);
+	void clearAttackedSlots();
+	void clearBlockedPieces();
+	void recalculateAttackedSlots();
 };
 
 #endif // !PIECE_H

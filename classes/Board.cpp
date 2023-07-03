@@ -39,7 +39,9 @@ Piece* Board::move(Coords from, Coords to) {
 	const unsigned short initialIndex = from.x + from.y * this->width;
 	const unsigned short finalIndex = to.x + to.y * this->width;
 	Piece* pieceToMove = this->board[initialIndex].removePiece();
-	return this->board[finalIndex].setPiece(pieceToMove);
+	Piece* oldPiece = this->board[finalIndex].setPiece(pieceToMove);
+	this->slotAt(finalIndex)->recalculateAttacks();
+	return oldPiece;
 }
 
 Piece* Board::pieceAt(unsigned short index) const {

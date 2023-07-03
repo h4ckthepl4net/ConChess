@@ -111,3 +111,15 @@ bool Slot::moveWillCoverAllAttacks(const Coords& coords) const {
 	return true;
 }
 
+void Slot::recalculateAttacks() {
+	unsigned int size = this->attackedByCount;
+	Piece** newArray = new Piece * [this->attackedByCount];
+	for (unsigned int i = 0; i < this->attackedByCount; i++) {
+		newArray[i] = this->attackedBy[i];
+	}
+	for (unsigned int i = 0; i < size; i++) {
+		newArray[i]->recalculateAttackedSlots();
+	}
+	delete[] newArray;
+}
+

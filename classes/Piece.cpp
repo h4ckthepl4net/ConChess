@@ -225,3 +225,24 @@ bool Piece::considerChecked(const Coords& coords) const {
 	Slot* kingSlot = this->board.slotAt(kingCoords);
 	return !kingSlot->isAttacked() || kingSlot->moveWillCoverAllAttacks(coords);
 }
+
+void Piece::clearAttackedSlots() {
+	for (unsigned int i = 0; i < this->attackedSlotsCount; i++) {
+		this->attackedSlots[i]->removeAttackedBy(this);
+	}
+	delete[] this->attackedSlots;
+	this->attackedSlots = nullptr;
+	this->attackedSlotsCount = 0;
+}
+
+void Piece::clearBlockedPieces() {
+	delete[] this->blockedSameColorPieces;
+	this->blockedSameColorPieces = nullptr;
+	this->blockedPiecesCount = 0;
+}
+
+void Piece::recalculateAttackedSlots() {
+	this->clearBlockedPieces();
+	this->clearAttackedSlots();
+	this->getAvailableMoves(true);
+}
