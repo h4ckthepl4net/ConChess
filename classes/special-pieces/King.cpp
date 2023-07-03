@@ -17,6 +17,10 @@ King::King(
 ) {
 }
 
+bool King::considerChecked(const Coords& coords) const {
+	return !this->board.slotAt(coords)->willBeAttacked(this);
+}
+
 std::pair<Coords*, unsigned int> King::getAvailableMoves(bool updateAttacksAndBlocks) {
 	Coords* availableMoves = new Coords[10];
 	unsigned int availableMovesCount = 0;

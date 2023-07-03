@@ -16,6 +16,7 @@ public:
 	bool move(Coords) override;
 	bool canMove(Coords coord) const override;
 	bool isMoveAlgorithmSatisfied(const Coords& coord) const override;
+	bool considerChecked(const Coords&) const override;
 };
 
 #endif
