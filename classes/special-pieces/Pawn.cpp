@@ -28,17 +28,21 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 		char forwardPieceX = coords.x;
 		char forwardPieceY = coords.y + coef;
 		Coords forwardCoords = { forwardPieceY, forwardPieceX };
-		bool canMoveForward = this->canMove(forwardCoords) && this->considerChecked(forwardCoords);
+		bool canMoveForward = this->canMove(forwardCoords);
 		if (canMoveForward) {
-			availableMoves[availableMovesCount] = forwardCoords;
-			availableMovesCount++;
+			if (this->considerChecked(forwardCoords)) {
+				availableMoves[availableMovesCount] = forwardCoords;
+				availableMovesCount++;
+			}
 		}
 		char doubleForwardPieceX = coords.x;
 		char doubleForwardPieceY = coords.y + coef * 2;
 		Coords doubleForwardCoords = { doubleForwardPieceY, doubleForwardPieceX };
-		if (this->canMove(doubleForwardCoords) && this->considerChecked(doubleForwardCoords) && canMoveForward) {
-			availableMoves[availableMovesCount] = doubleForwardCoords;
-			availableMovesCount++;
+		if (this->canMove(doubleForwardCoords) && canMoveForward) {
+			if (this->considerChecked(doubleForwardCoords)) {
+				availableMoves[availableMovesCount] = doubleForwardCoords;
+				availableMovesCount++;
+			}
 		}
 		if (coords.x > 0) {
 			char leftPieceX = coords.x - 1;
