@@ -73,8 +73,8 @@ Coords Piece::addDelta(Coords delta) {
 bool Piece::move(Coords coords) {
 	if (this->canMove(coords) && this->considerChecked(coords)) {
 		Piece* eatenPiece = this->board.move(this->coords, coords);
+		Coords oldCoords = this->coords;
 		this->coords = coords;
-		this->board.slotAt(coords)->recalculateAttacks();
 		this->isMoved = true;
 		this->cyclesStandingWithoutAMove = 0;
 		if (eatenPiece) {
@@ -87,6 +87,8 @@ bool Piece::move(Coords coords) {
 			this->removeBlockedPiece(this->blockedSameColorPieces[i]);
 		}
 		this->getAvailableMoves(true);
+		this->board.slotAt(oldCoords)->recalculateAttacks();
+		this->board.slotAt(coords)->recalculateAttacks();
 		return true;
 	}
 	return false;
@@ -217,7 +219,6 @@ void Piece::removeBlockedPiece(Piece* piece) {
 	}
 	this->blockedPiecesCount--;
 	delete[] oldPtr;
-	piece->getAvailableMoves(true);
 }
 
 bool Piece::considerChecked(const Coords& coords) const {
