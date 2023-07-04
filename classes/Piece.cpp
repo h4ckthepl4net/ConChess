@@ -272,3 +272,11 @@ void Piece::recalculateAttackedSlots() {
 	this->clearAttackedSlots();
 	this->getAvailableMoves(true);
 }
+
+void Piece::setDead() {
+	this->isPieceAlive = false;
+}
+
+bool Piece::isAlive() const {
+	return this->isPieceAlive;
+}

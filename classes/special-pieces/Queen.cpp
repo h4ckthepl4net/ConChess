@@ -72,18 +72,16 @@ std::pair<Coords*, unsigned int> Queen::getAvailableMoves(bool updateAttacksAndB
 	return std::pair(availableMoves, availableMovesCount);
 }
 
-bool Queen::canMove(Coords coords, bool considerKingDefence) const {
-	if (this->isMoveAlgorithmSatisfied(coords) &&
-		((considerKingDefence && this->considerKingDefense()) || !considerKingDefence)) {
-		Coords delta = this->getDelta(coords);
-		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
-		if (piece && !this->isSameColor(piece) || !piece) {
-			return Bishop::canMove(coords) || Rook::canMove(coords);
-		}
+bool Queen::canMove(Coords coords,  bool considerKingDefence) const {
+	if (Rook::isMoveAlgorithmSatisfied(coords)) {
+		return Rook::canMove(coords, considerKingDefence);
+	}
+	else if (Bishop::isMoveAlgorithmSatisfied(coords)) {
+		return Bishop::canMove(coords, considerKingDefence);
 	}
 	return false;
 }
 
 bool Queen::isMoveAlgorithmSatisfied(const Coords& coords) const {
-	return Bishop::isMoveAlgorithmSatisfied(coords) || Rook::isMoveAlgorithmSatisfied(coords);
+	return true;
 }

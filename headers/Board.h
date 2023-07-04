@@ -40,6 +40,7 @@ class Board {
 		void addAttackedBy(Coords coord, Piece* piece);
 		void removeAttackedBy(Coords coord, Piece* piece);
 		const Console& getConsole() const;
+		bool isCheckmate(Player*) const;
 
 	friend class Console;
 };

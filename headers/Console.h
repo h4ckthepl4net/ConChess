@@ -43,6 +43,7 @@ public:
 	void drawBoard(bool = false) const;
 	void drawPlayerStats(Player*, unsigned int) const;
 	int drawPromptAndListen(std::string, ConsoleButton*, unsigned int) const;
+	void drawGameOver(Player*) const;
 	void clear() const;
 	ConsoleEvent listen(bool = true) const;
 };

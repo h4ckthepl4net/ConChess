@@ -22,6 +22,7 @@ class Slot;
 
 class Piece {
 protected:
+	bool isPieceAlive = true;
 	bool isMoved = false;
 	Color color;
 	std::string name;
@@ -84,6 +85,8 @@ public:
 	void clearAttackedSlots();
 	void clearBlockedPieces();
 	void recalculateAttackedSlots();
+	void setDead();
+	bool isAlive() const;
 };
 
 #endif // !PIECE_H

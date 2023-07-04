@@ -63,7 +63,11 @@ void Game::start() {
 			const std::uint8_t currentIndex = static_cast<std::uint8_t>(this->playerToPlay - this->players);
 			const std::uint8_t nextPlayer = currentIndex != 0 ? currentIndex % (this->playerCount-1) : currentIndex + 1;
 			this->playerToPlay = this->players + nextPlayer;
-		}
 
+			if (this->board.isCheckmate(this->playerToPlay)) {
+				this->console.drawGameOver(this->playerToPlay);
+				break;
+			}
+		}
 	} while (true);
 }

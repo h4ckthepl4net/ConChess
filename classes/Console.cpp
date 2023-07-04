@@ -203,3 +203,10 @@ int Console::drawPromptAndListen(std::string prompt, ConsoleButton* buttonArray,
 		}
 	}
 }
+
+void Console::drawGameOver(Player* lostPlayer) const {
+	this->clear();
+	SetConsoleTextAttribute(this->hOutConsole, FOREGROUND_BLUE | FOREGROUND_GREEN | FOREGROUND_RED | FOREGROUND_INTENSITY);
+	std::cout << "Game Over!" << std::endl;
+	std::cout << "Player " << lostPlayer->getName() << " has lost!" << std::endl;
+}

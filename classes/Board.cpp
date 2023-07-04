@@ -160,3 +160,18 @@ void Board::removeAttackedBy(Coords coords, Piece* piece) {
 const Console& Board::getConsole() const {
 	return this->console;
 }
+
+bool Board::isCheckmate(Player* playerToPlay) const {
+	King* king = static_cast<King*>(playerToPlay->getKing());
+	Piece** pieces = playerToPlay->getPieces();
+	for (unsigned char i = 0; i < playerToPlay->getPiecesCount(); i++) {
+		Piece* piece = pieces[i];
+		if (piece->isAlive()) {
+			std::pair<Coords*, unsigned int> availableMoves = piece->getAvailableMoves(false, true);
+			if (availableMoves.second > 0) {
+				return false;
+			}
+		}
+	}
+	return true;
+}

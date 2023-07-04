@@ -99,6 +99,7 @@ void Player::initPieces(unsigned char count) {
 }
 
 void Player::addEatenPiece(Piece* piece) {
+	piece->setDead();
 	Piece** oldPtr = this->stats.eatenPieces;
 	this->stats.eatenPiecesCount++;
 	this->stats.eatenPieces = new Piece*[this->stats.eatenPiecesCount];
