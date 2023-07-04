@@ -18,7 +18,7 @@ Knight::Knight(
 ) {
 }
 
-std::pair<Coords*, unsigned int> Knight::getAvailableMoves(bool updateAttacksAndBlocks) {
+std::pair<Coords*, unsigned int> Knight::getAvailableMoves(bool updateAttacksAndBlocks, bool considerKingDefence) {
 	Coords* availableMoves = new Coords[8];
 	unsigned int availableMovesCount = 0;
 	char boardHeight = static_cast<char>(this->board.getHeight());
@@ -31,7 +31,7 @@ std::pair<Coords*, unsigned int> Knight::getAvailableMoves(bool updateAttacksAnd
 									coords.x < boardWidth && coords.y < boardHeight;
 				bool canMove = false;
 				if (isInBoardArea) {
-					canMove = this->canMove(coords);
+					canMove = this->canMove(coords, considerKingDefence);
 					if (canMove) {
 						if (this->considerChecked(coords)) {
 							availableMoves[availableMovesCount++] = coords;
@@ -49,7 +49,7 @@ std::pair<Coords*, unsigned int> Knight::getAvailableMoves(bool updateAttacksAnd
 				isInBoardArea = coords.x >= 0 && coords.y >= 0 &&
 								coords.x < boardWidth && coords.y < boardHeight;
 				if (isInBoardArea) {
-					canMove = this->canMove(coords);
+					canMove = this->canMove(coords, considerKingDefence);
 					if (canMove) {
 						if (this->considerChecked(coords)) {
 							availableMoves[availableMovesCount++] = coords;
@@ -75,8 +75,9 @@ std::pair<Coords*, unsigned int> Knight::getAvailableMoves(bool updateAttacksAnd
 	return std::pair(availableMoves, availableMovesCount);
 }
 
-bool Knight::canMove(Coords coords) const {
-	if (this->isMoveAlgorithmSatisfied(coords)) {
+bool Knight::canMove(Coords coords, bool considerKingDefence) const {
+	if (this->isMoveAlgorithmSatisfied(coords) &&
+		((considerKingDefence && this->considerKingDefense()) || !considerKingDefence)) {
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
 		if (piece && !this->isSameColor(piece) || !piece) {
 			return true;

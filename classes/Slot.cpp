@@ -123,3 +123,11 @@ void Slot::recalculateAttacks() {
 	delete[] newArray;
 }
 
+std::pair<Piece**, unsigned int> Slot::getAttackedBy() const {
+	Piece** attackedBy = new Piece * [this->attackedByCount];
+	for (unsigned int i = 0; i < this->attackedByCount; i++) {
+		attackedBy[i] = this->attackedBy[i];
+	}
+	return { attackedBy, this->attackedByCount };
+}
+

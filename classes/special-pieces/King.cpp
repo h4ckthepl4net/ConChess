@@ -21,7 +21,7 @@ bool King::considerChecked(const Coords& coords) const {
 	return !this->board.slotAt(coords)->willBeAttacked(this);
 }
 
-std::pair<Coords*, unsigned int> King::getAvailableMoves(bool updateAttacksAndBlocks) {
+std::pair<Coords*, unsigned int> King::getAvailableMoves(bool updateAttacksAndBlocks, bool considerKingDefence) {
 	Coords* availableMoves = new Coords[10];
 	unsigned int availableMovesCount = 0;
 	for (char i = -1; i < 2; i++) {
@@ -30,7 +30,7 @@ std::pair<Coords*, unsigned int> King::getAvailableMoves(bool updateAttacksAndBl
 			bool isInBoardArea = coords.x >= 0 && coords.y >= 0 &&
 								coords.x < this->board.getWidth() && coords.y < this->board.getHeight();
 			if (isInBoardArea) {
-				if (this->canMove(coords)) {
+				if (this->canMove(coords, considerKingDefence)) {
 					if (this->considerChecked(coords)) {
 						availableMoves[availableMovesCount++] = coords;
 					}
@@ -44,13 +44,13 @@ std::pair<Coords*, unsigned int> King::getAvailableMoves(bool updateAttacksAndBl
 	}
 	if (!this->hasMoved()) {
 		Coords castling = { this->coords.y, this->coords.x - 2 };
-		if (this->canMove(castling)) {
+		if (this->canMove(castling, considerKingDefence)) {
 			if (this->considerChecked(coords)) {
 				availableMoves[availableMovesCount++] = castling;
 			}
 		}
 		castling.x = this->coords.x + 2;
-		if (this->canMove(castling)) {
+		if (this->canMove(castling, considerKingDefence)) {
 			if (this->considerChecked(coords)) {
 				availableMoves[availableMovesCount++] = castling;
 			}
@@ -72,7 +72,7 @@ bool King::move(Coords coords) {
 	return result;
 }
 
-bool King::canMove(Coords coords) const {
+bool King::canMove(Coords coords, bool considerKingDefence) const {
 	if (this->isMoveAlgorithmSatisfied(coords)) {
 		Coords delta = this->getDelta(coords);
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });

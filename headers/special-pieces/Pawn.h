@@ -14,9 +14,9 @@ public:
 		Player& player,
 		Board& board
 	);
-	std::pair<Coords*, unsigned int> getAvailableMoves(bool = false) override;
+	std::pair<Coords*, unsigned int> getAvailableMoves(bool = false, bool = true) override;
 	bool move(Coords) override;
-	bool canMove(Coords) const override;
+	bool canMove(Coords, bool = true) const override;
 	bool isMoveAlgorithmSatisfied(const Coords&) const override;
 	void incrementNoMoveCycles() override;
 	void promote();

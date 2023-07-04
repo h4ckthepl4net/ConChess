@@ -28,6 +28,7 @@ class Slot {
 		bool moveWillCoverAllAttacks(const Coords&) const;
 		Coords getDelta(const Coords&) const;
 		void recalculateAttacks();
+		std::pair<Piece**, unsigned int> getAttackedBy() const;
 };
 
 

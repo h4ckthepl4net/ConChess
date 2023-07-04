@@ -86,9 +86,9 @@ bool Piece::move(Coords coords) {
 		for (unsigned int i = 0; i < this->blockedPiecesCount; i++) {
 			this->removeBlockedPiece(this->blockedSameColorPieces[i]);
 		}
-		this->getAvailableMoves(true);
 		this->board.slotAt(oldCoords)->recalculateAttacks();
 		this->board.slotAt(coords)->recalculateAttacks();
+		this->getAvailableMoves(true);
 		return true;
 	}
 	return false;
@@ -226,6 +226,30 @@ bool Piece::considerChecked(const Coords& coords) const {
 	Coords kingCoords = king->getCoords();
 	Slot* kingSlot = this->board.slotAt(kingCoords);
 	return !kingSlot->isAttacked() || kingSlot->moveWillCoverAllAttacks(coords);
+}
+
+bool Piece::considerKingDefense() const {
+	Coords kingCoords = this->owner.getKing()->getCoords();
+	Slot* currentSlot = this->board.slotAt(this->coords);
+	Piece* oldPiece = currentSlot->removePiece();
+	std::pair<Piece **, const unsigned int> attackers = currentSlot->getAttackedBy();
+	for (unsigned int i = 0; i < attackers.second; i++) {
+		if (!attackers.first[i]->isSameColor(oldPiece)) {
+			std::pair<Coords*, unsigned int> moves = attackers.first[i]->getAvailableMoves(false, false);
+			for (unsigned int j = 0; j < moves.second; j++) {
+				if (moves.first[j].x == kingCoords.x && moves.first[j].y == kingCoords.y) {
+					currentSlot->setPiece(oldPiece);
+					delete[] attackers.first;
+					delete[] moves.first;
+					return false;
+				}
+			}
+			delete[] moves.first;
+		}
+	}
+	currentSlot->setPiece(oldPiece);
+	delete[] attackers.first;
+	return true;
 }
 
 void Piece::clearAttackedSlots() {

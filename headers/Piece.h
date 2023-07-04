@@ -51,15 +51,16 @@ public:
 	);
 	std::string getId();
 	virtual std::string getSymbol();
-	virtual std::pair<Coords*, unsigned int> getAvailableMoves(bool = false) = 0;
+	virtual std::pair<Coords*, unsigned int> getAvailableMoves(bool = false, bool = true) = 0;
 	virtual bool isMoveAlgorithmSatisfied(const Coords& coords) const = 0;
-	virtual bool canMove(Coords coords) const = 0;
+	virtual bool canMove(Coords coords, bool = true) const = 0;
 	virtual int getConsoleColor();
 	virtual ~Piece() = default;
 	virtual bool move(Coords coords);
 	virtual void incrementCycles();
 	virtual void incrementNoMoveCycles();
 	virtual bool considerChecked(const Coords&) const;
+	virtual bool considerKingDefense() const;
 	Coords addDelta(Coords);
 	bool isWhite() const;
 	bool isBlack() const;

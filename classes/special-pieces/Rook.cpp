@@ -19,7 +19,7 @@ Rook::Rook(
 ) {
 }
 
-std::pair<Coords*, unsigned int> Rook::getAvailableMoves(bool updateAttacksAndBlocks) {
+std::pair<Coords*, unsigned int> Rook::getAvailableMoves(bool updateAttacksAndBlocks, bool considerKingDefence) {
 	Coords* availableMoves = new Coords[14];
 	unsigned int availableMovesCount = 0;
 	char blockedFromLeft = -1;
@@ -29,7 +29,7 @@ std::pair<Coords*, unsigned int> Rook::getAvailableMoves(bool updateAttacksAndBl
 	for (char i = 0; i < 8; i++) {
 		if (i != this->coords.x && blockedFromRight == this->board.getWidth()) {
 			Coords coords = { this->coords.y, i };
-			if (this->canMove(coords)) {
+			if (this->canMove(coords, considerKingDefence)) {
 				if (this->considerChecked(coords)) {
 					availableMoves[availableMovesCount++] = { this->coords.y, i };
 				}
@@ -52,7 +52,7 @@ std::pair<Coords*, unsigned int> Rook::getAvailableMoves(bool updateAttacksAndBl
 		}
 		if (i != this->coords.y && blockedFromTop == this->board.getHeight()) {
 			Coords coords = { i, this->coords.x };
-			if (this->canMove(coords)) {
+			if (this->canMove(coords, considerKingDefence)) {
 				if (this->considerChecked(coords)) {
 					availableMoves[availableMovesCount++] = { i, this->coords.x };
 				}
@@ -120,8 +120,9 @@ std::pair<Coords*, unsigned int> Rook::getAvailableMoves(bool updateAttacksAndBl
 	return std::pair(availableMoves, availableMovesCount);
 }
 
-bool Rook::canMove(Coords coords) const {
-	if (this->isMoveAlgorithmSatisfied(coords)) {
+bool Rook::canMove(Coords coords, bool considerKingDefence) const {
+	if (this->isMoveAlgorithmSatisfied(coords) &&
+		((considerKingDefence && this->considerKingDefense()) || !considerKingDefence)) {
 		Coords delta = this->getDelta(coords);
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
 		if (piece && !this->isSameColor(piece) || !piece) {

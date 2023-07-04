@@ -19,7 +19,7 @@ Pawn::Pawn(
 ) {
 }
 
-std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBlocks) {
+std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBlocks, bool considerKingDefence) {
 	const Coords& coords = this->coords;
 	if (coords.y > 0 && coords.y < this->board.getHeight() - 1) {
 		std::int8_t coef = this->isWhite() ? 1 : -1;
@@ -28,7 +28,7 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 		char forwardPieceX = coords.x;
 		char forwardPieceY = coords.y + coef;
 		Coords forwardCoords = { forwardPieceY, forwardPieceX };
-		bool canMoveForward = this->canMove(forwardCoords);
+		bool canMoveForward = this->canMove(forwardCoords, considerKingDefence);
 		if (canMoveForward) {
 			if (this->considerChecked(forwardCoords)) {
 				availableMoves[availableMovesCount] = forwardCoords;
@@ -38,7 +38,7 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 		char doubleForwardPieceX = coords.x;
 		char doubleForwardPieceY = coords.y + coef * 2;
 		Coords doubleForwardCoords = { doubleForwardPieceY, doubleForwardPieceX };
-		if (this->canMove(doubleForwardCoords) && canMoveForward) {
+		if (this->canMove(doubleForwardCoords, considerKingDefence) && canMoveForward) {
 			if (this->considerChecked(doubleForwardCoords)) {
 				availableMoves[availableMovesCount] = doubleForwardCoords;
 				availableMovesCount++;
@@ -48,7 +48,7 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 			char leftPieceX = coords.x - 1;
 			char leftForwardPieceY = coords.y + coef;
 			Coords leftForwardCoords = { leftForwardPieceY, leftPieceX };
-			if (this->canMove(leftForwardCoords) && this->considerChecked(leftForwardCoords)) {
+			if (this->canMove(leftForwardCoords, considerKingDefence) && this->considerChecked(leftForwardCoords)) {
 				availableMoves[availableMovesCount] = leftForwardCoords;
 				availableMovesCount++;
 			}
@@ -60,7 +60,7 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 			char rightPieceX = coords.x + 1;
 			char rightForwardPieceY = coords.y + coef;
 			Coords rightForwardCoords = { rightForwardPieceY, rightPieceX };
-			if (this->canMove(rightForwardCoords) && this->considerChecked(rightForwardCoords)) {
+			if (this->canMove(rightForwardCoords, considerKingDefence) && this->considerChecked(rightForwardCoords)) {
 				availableMoves[availableMovesCount] = rightForwardCoords;
 				availableMovesCount++;
 			}
@@ -96,8 +96,9 @@ bool Pawn::move(Coords coords) {
 	return result;
 }
 
-bool Pawn::canMove(Coords coords) const {
-	if (this->isMoveAlgorithmSatisfied(coords)) {
+bool Pawn::canMove(Coords coords, bool considerKingDefence) const {
+	if (this->isMoveAlgorithmSatisfied(coords) &&
+		((considerKingDefence && this->considerKingDefense()) || !considerKingDefence)) {
 		Coords delta = this->getDelta(coords);
 		Piece* piece = this->board.pieceAt({coords.x, coords.y});
 		if (delta.x != 0) {

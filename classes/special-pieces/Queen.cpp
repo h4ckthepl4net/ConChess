@@ -56,9 +56,9 @@ Piece(
 	board
 ) {}
 
-std::pair<Coords*, unsigned int> Queen::getAvailableMoves(bool updateAttacksAndBlocks) {
-	std::pair<Coords*, unsigned int> bishopMoves = Bishop::getAvailableMoves(updateAttacksAndBlocks);
-	std::pair<Coords*, unsigned int> rookMoves = Rook::getAvailableMoves(updateAttacksAndBlocks);
+std::pair<Coords*, unsigned int> Queen::getAvailableMoves(bool updateAttacksAndBlocks, bool considerKingDefence) {
+	std::pair<Coords*, unsigned int> bishopMoves = Bishop::getAvailableMoves(updateAttacksAndBlocks, considerKingDefence);
+	std::pair<Coords*, unsigned int> rookMoves = Rook::getAvailableMoves(updateAttacksAndBlocks, considerKingDefence);
 	Coords* availableMoves = new Coords[bishopMoves.second + rookMoves.second];
 	unsigned int availableMovesCount = 0;
 	for (unsigned int i = 0; i < bishopMoves.second; i++) {
@@ -72,8 +72,9 @@ std::pair<Coords*, unsigned int> Queen::getAvailableMoves(bool updateAttacksAndB
 	return std::pair(availableMoves, availableMovesCount);
 }
 
-bool Queen::canMove(Coords coords) const {
-	if (this->isMoveAlgorithmSatisfied(coords)) {
+bool Queen::canMove(Coords coords, bool considerKingDefence) const {
+	if (this->isMoveAlgorithmSatisfied(coords) &&
+		((considerKingDefence && this->considerKingDefense()) || !considerKingDefence)) {
 		Coords delta = this->getDelta(coords);
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
 		if (piece && !this->isSameColor(piece) || !piece) {
