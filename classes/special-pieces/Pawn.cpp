@@ -52,7 +52,6 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 				availableMoves[availableMovesCount] = leftForwardCoords;
 				availableMovesCount++;
 			}
-			// TODO maybe blocked needed, not sure
 			this->board.addAttackedBy(leftForwardCoords, this);
 			this->addAttackedSlot(this->board.slotAt(leftForwardCoords));
 		}
@@ -64,7 +63,6 @@ std::pair<Coords*, unsigned int> Pawn::getAvailableMoves(bool updateAttacksAndBl
 				availableMoves[availableMovesCount] = rightForwardCoords;
 				availableMovesCount++;
 			}
-			// TODO maybe blocked needed, not sure
 			this->board.addAttackedBy(rightForwardCoords, this);
 			this->addAttackedSlot(this->board.slotAt(rightForwardCoords));
 		}
@@ -150,7 +148,7 @@ void Pawn::promote() {
 	pieces[3] = new Knight(this->color, this->coords, this->owner, this->board);
 	int selectedButtonId = this->board.getConsole().drawPromptAndListen("Promote pawn", buttons, 4);
 	Piece* newPiece = pieces[selectedButtonId];
-	this->board.removePiece(this->coords); // TODO remove piece from memory
+	delete this->board.removePiece(this->coords);
 	this->board.placePieces(&newPiece, 1);
 	for (unsigned int i = 0; i < 4; i++) {
 		if (i != selectedButtonId) {

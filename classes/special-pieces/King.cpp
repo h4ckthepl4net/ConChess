@@ -77,9 +77,6 @@ bool King::canMove(Coords coords, bool considerKingDefence) const {
 		Coords delta = this->getDelta(coords);
 		Piece* piece = this->board.pieceAt({ coords.x, coords.y });
 		if ((piece && !this->isSameColor(piece) || !piece) && !this->board.slotAt(coords)->willBeAttacked(this)) {
-			/*if (this->board.isAttacked(coords)) {
-				TODO implement checked functionality
-			}*/
 			if (abs(delta.x) < 2 && abs(delta.y) < 2 && (delta.y || delta.x)) {
 				return true;
 			} else if (abs(delta.x) == 2 && !this->hasMoved()) {
