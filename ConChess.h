@@ -6,7 +6,7 @@
 #ifndef CONCHESS_H
 #define CONCHESS_H
 
-#include "headers/Console.h"
+#include "headers/Game.h"
 
 #endif // !CONCHESS_H
 

@@ -12,7 +12,54 @@ endif()
 project ("ConChess")
 
 # Add source to this project's executable.
-add_executable (ConChess "ConChess.cpp" "ConChess.h" "classes/Game.cpp" "classes/Player.cpp" "classes/Board.cpp" "classes/Console.cpp" "headers/Console.h" "headers/Game.h")
+add_executable (
+	ConChess
+	
+	"ConChess.cpp"
+	"ConChess.h"
+	
+	
+	"headers/utilities/Color.h"
+	"headers/utilities/Coords.h"
+	"headers/utilities/PlayerStats.h"
+	"headers/utilities/ConsoleEvent.h"
+	"headers/utilities/ConsoleEventType.h" 
+	"headers/utilities/ClickData.h" 
+	"headers/utilities/ConsoleEventDataUnion.h" 
+	"headers/utilities/KeyData.h"
+	"headers/constants/Pieces.h"
+	"headers/constants/PieceIDs.h"
+	"headers/constants/FieldDeltas.h"
+	"headers/constants/Fields.h"
+	"headers/constants/PiecePoints.h"
+
+	"headers/Slot.h"
+	"headers/Game.h"
+	"headers/Player.h"
+	"headers/Board.h"
+	"headers/Console.h"
+	"headers/Piece.h"
+	"headers/special-pieces/King.h"
+	"headers/special-pieces/Queen.h"
+	"headers/special-pieces/Bishop.h"
+	"headers/special-pieces/Knight.h"
+	"headers/special-pieces/Rook.h"
+	"headers/special-pieces/Pawn.h"
+	
+	"classes/Slot.cpp"
+	"classes/Game.cpp"
+	"classes/Player.cpp" 
+	"classes/Board.cpp"
+	"classes/Console.cpp"
+	"classes/Piece.cpp"
+	"classes/special-pieces/King.cpp"
+	"classes/special-pieces/Queen.cpp"
+	"classes/special-pieces/Bishop.cpp"
+	"classes/special-pieces/Knight.cpp"
+	"classes/special-pieces/Rook.cpp"
+	"classes/special-pieces/Pawn.cpp"
+	"headers/utilities/ConsoleButton.h"
+)
 
 if (CMAKE_VERSION VERSION_GREATER 3.12)
   set_property(TARGET ConChess PROPERTY CXX_STANDARD 20)

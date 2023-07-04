@@ -5,9 +5,10 @@
 
 int main()
 {
-    Console console(17, 17);
-
-
+    Game game;
+	game.preparePlayers();
+	game.prepareBoard();
+	game.start();
 
 	return 0;
 }
