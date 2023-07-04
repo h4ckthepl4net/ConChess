@@ -46,10 +46,10 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 				char previousX = this->coords.x + previousInd;
 				if (previousX >= 0 && previousX < boardWidth &&
 					previousY >= 0 && previousY < boardHeight) {
-					Piece* previous = this->board.pieceAt({ previousY, previousX });
-					if (previous && previous != this) {
-						upRightCoords.x = previousX;
-						upRightCoords.y = previousY;
+					Piece* previous = this->board.pieceAt({ previousX, previousY });
+					if (previous) {
+						upRightCoords.x = previous != this ? previousX : boardWidth;
+						upRightCoords.y = previous != this ? previousY : boardHeight;
 						upRight = false;
 					}
 				}
@@ -70,10 +70,10 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 				char previousX = this->coords.x + previousInd;
 				if (previousX >= 0 && previousX < boardWidth &&
 					previousY >= 0 && previousY < boardHeight) {
-					Piece* previous = this->board.pieceAt({ previousY, previousX });
-					if (previous && previous != this) {
-						downRightCoords.x = previousX;
-						downRightCoords.y = previousY;
+					Piece* previous = this->board.pieceAt({ previousX, previousY });
+					if (previous) {
+						downRightCoords.x = previous != this ? previousX : boardWidth;
+						downRightCoords.y = previous != this ? previousY : -1;
 						downRight = false;
 					}
 				}
@@ -94,10 +94,10 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 				char previousX = this->coords.x - previousInd;
 				if (previousX >= 0 && previousX < boardWidth &&
 					previousY >= 0 && previousY < boardHeight) {
-					Piece* previous = this->board.pieceAt({ previousY, previousX });
-					if (previous && previous != this) {
-						downLeftCoords.x = previousX;
-						downLeftCoords.y = previousY;
+					Piece* previous = this->board.pieceAt({ previousX, previousY });
+					if (previous) {
+						downLeftCoords.x = previous != this ? previousX : -1;
+						downLeftCoords.y = previous != this ? previousY : -1;
 						downLeft = false;
 					}
 				}
@@ -118,10 +118,10 @@ std::pair<Coords*, unsigned int> Bishop::getAvailableMoves(bool updateAttacksAnd
 				char previousX = this->coords.x - previousInd;
 				if (previousX >= 0 && previousX < boardWidth &&
 					previousY >= 0 && previousY < boardHeight) {
-					Piece* previous = this->board.pieceAt({ previousY, previousX });
-					if (previous && previous != this) {
-						upLeftCoords.x = previousX;
-						upLeftCoords.y = previousY;
+					Piece* previous = this->board.pieceAt({ previousX, previousY });
+					if (previous) {
+						upLeftCoords.x = previous != this ? previousX : -1;
+						upLeftCoords.y = previous != this ? previousY : boardHeight;
 						upLeft = false;
 					}
 				}
